@@ -1,0 +1,12 @@
+# for importing environment variables
+python-dotenv
+
+# Flask, and components
+flask
+
+# for auth0
+authlib
+requests
+
+# wsgi server for production-ready deployment
+waitress
