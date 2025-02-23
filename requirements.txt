@@ -2,11 +2,12 @@
 python-dotenv
 
 # Flask, and components
-flask
+Flask
+Flask-SQLAlchemy
 
 # for auth0
-authlib
+Authlib
 requests
 
 # wsgi server for production-ready deployment
-waitress
+Waitress
