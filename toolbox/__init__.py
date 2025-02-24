@@ -7,6 +7,7 @@ from importlib import import_module
 # flask and its plugins
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_minify import Minify
 
 # globally accessible objects
 db = SQLAlchemy()
@@ -24,6 +25,7 @@ def create_app():
     # initialize core application
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object("toolbox.config.Config")
+    Minify(app=app, html=True, js=True, cssless=True)
 
     register_extensions(app)
 

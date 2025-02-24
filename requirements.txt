@@ -1,6 +1,7 @@
 # Flask bits
 Flask
 Flask-SQLAlchemy
+Flask_Minify
 
 # for auth0 and its variables
 python-dotenv
@@ -8,4 +9,4 @@ Authlib
 requests
 
 # production-ready WSGI server
-waitress
+gunicorn
