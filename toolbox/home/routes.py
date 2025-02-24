@@ -8,10 +8,10 @@ from toolbox.home import blueprint
 def home():
     return render_template("home_bp/home.html")
 
-@blueprint.route("/team_info")
-def team_info():
+@blueprint.route("/team")
+def team():
     return render_template("home_bp/team.html")
 
-@blueprint.route("/faculty_info")
-def instructor_info():
+@blueprint.route("/faculty")
+def faculty():
     return render_template("home_bp/faculty.html")
