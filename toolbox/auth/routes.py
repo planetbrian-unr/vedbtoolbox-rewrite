@@ -26,6 +26,7 @@ def callback():
 	token = oauth.auth0.authorize_access_token()
 	session["user"] = token
 	
+
 	# parse returned json in token and add attributes to our local db
 	# Parse the user info from the token's userinfo field
 	user_info = token.get("userinfo", {})
@@ -34,11 +35,11 @@ def callback():
 	json_email = user_info.get("email")
 	
 	# Add or update the user in the database
-	user_in_db = User.query.filter_by(user_id=json_user_id).first()
+	user_in_db = User.query.filter_by(id=json_user_id).first()
 	if not user_in_db:
 		# Add new user if not already in the database
 		user_in_db = User(
-			user_id=json_user_id,
+			id=json_user_id,
 			username=json_username,
 			email=json_email,
 		)
