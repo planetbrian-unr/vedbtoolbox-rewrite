@@ -25,7 +25,6 @@ def login():
 def callback():
 	token = oauth.auth0.authorize_access_token()
 	session["user"] = token
-	
 
 	# parse returned json in token and add attributes to our local db
 	# Parse the user info from the token's userinfo field
