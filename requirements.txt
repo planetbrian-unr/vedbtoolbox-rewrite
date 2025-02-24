@@ -1,13 +1,11 @@
-# for importing environment variables
-python-dotenv
-
-# Flask, and components
+# Flask bits
 Flask
 Flask-SQLAlchemy
 
-# for auth0
+# for auth0 and its variables
+python-dotenv
 Authlib
 requests
 
-# wsgi server for production-ready deployment
-Waitress
+# production-ready WSGI server
+waitress

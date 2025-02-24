@@ -8,4 +8,5 @@ class Config():
 	
 	# This will create a file in <app> FOLDER
 	SQLALCHEMY_DATABASE_URI = "sqlite:///project.sqlite"
+	SQLALCHEMY_ECHO = False
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
