@@ -1,7 +1,11 @@
 # Flask bits
 Flask
 Flask-SQLAlchemy
-Flask_Minify
+Flask_Minify # compress webpage stuff for better serving
+
+# Flask file-upload system
+Flask_WTF
+Flask-Reuploaded
 
 # for auth0 and its variables
 python-dotenv
