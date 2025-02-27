@@ -30,7 +30,7 @@ def create_app():
     register_extensions(app)
 
     # blueprints
-    blueprint_list = ["home", "auth", "file_upload", "visualizer"]
+    blueprint_list = ["home", "auth", "file_upload"]
     register_blueprints(app, blueprint_list)
 
     with app.app_context():
