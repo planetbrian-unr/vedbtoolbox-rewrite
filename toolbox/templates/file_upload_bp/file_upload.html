@@ -1,4 +1,4 @@
-{% extends 'visualizer_bp/base.jinja' %}
+{% extends 'file_upload_bp/base.jinja' %}
 
 {% block header %}
     <h1>{% block title %}File Upload{% endblock %}</h1>
@@ -43,11 +43,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                        <form method="POST" action="/">
-                            {{ form.csrf_token }}
-                            {{ form.name.label }} {{ form.name(size=20) }}
-                            <input type="submit" value="Go">
                         </form>
                     </div>
                 </div>
