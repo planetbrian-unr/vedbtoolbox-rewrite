@@ -1,7 +1,12 @@
 {% extends 'file_upload/base.jinja' %}
+{% from 'bootstrap5/form.html' import render_form %}
 
 {% block header %}
     <h1>{% block title %}File Upload{% endblock %}</h1>
+{% endblock %}
+
+{%  block css %}
+    {{ dropzone.load_css() }}
 {% endblock %}
 
 {% block content %}
@@ -17,33 +22,7 @@
                         </p>
                     </div>
                     <div class="card card-plain">
-                        <form role="form" id="contact-form" method="post" autocomplete="off">
-                            <div class="card-body pb-2">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="input-group input-group-static mb-4">
-                                            <label>Full Name</label>
-                                            <input class="form-control" placeholder="eg. John Mitch" aria-label="Full Name" type="text" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 ps-md-2">
-                                        <div class="input-group input-group-static">
-                                            <label>Email</label>
-                                            <input type="email" class="form-control" placeholder="hello@creative-tim.com" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group input-group-static mb-0 mt-md-0 mt-4">
-                                    <label>How can we help you?</label>
-                                    <textarea name="message" class="form-control" id="message" rows="6" placeholder="Describe your problem in at least 250 characters"></textarea>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12 text-center">
-                                        <button type="submit" class="btn bg-gradient-dark mt-3 mb-0">Send Message</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        {{ render_form(databrary_url_form) }}
                     </div>
                 </div>
             </div>
@@ -96,4 +75,8 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block js %}
+    {{ dropzone.load_js() }}
 {% endblock %}
