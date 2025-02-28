@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='home_bp/img/vedb.png') }}">
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='home_bp/img/favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='home/img/vedb.png') }}">
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='home/img/favicon.png') }}">
         <title>{% block title %}{% endblock %} - VEDB Toolbox</title>
-        
+
         <!--     Fonts and icons     -->
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
         <!-- Nucleo Icons -->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home_bp/css/nucleo-icons.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home_bp/css/nucleo-svg.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/nucleo-icons.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/nucleo-svg.css') }}" />
 
         <!-- Material Icons -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
         <!-- CSS Files -->
-        <link id="pagestyle" href="{{ url_for('static', filename='home_bp/css/material-kit.css') }}" rel="stylesheet" />
+        <link id="pagestyle" href="{{ url_for('static', filename='home/css/material-kit.css') }}" rel="stylesheet" />
     </head>
     <body class="index-page bg-gray-200">
         <!-- Navbar -->
@@ -25,7 +25,7 @@
                 <div class="col-12">
                     <nav class="navbar navbar-expand-lg  blur border-radius-xl top-0 z-index-fixed shadow position-absolute my-3 p-2 start-0 end-0 mx-4">
                         <div class="container-fluid px-0">
-                            <a class="navbar-brand font-weight-bolder ms-sm-3 text-sm" href="{{ url_for('home_bp.home') }}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
+                            <a class="navbar-brand font-weight-bolder ms-sm-3 text-sm" href="{{ url_for('home.home') }}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
                             VEDB Toolbox
                             </a>
                             <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,19 +41,19 @@
                                         <a class="nav-link ps-2 d-flex cursor-pointer align-items-center font-weight-semibold" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="material-symbols-rounded opacity-6 me-2 text-md">person</i>
                                         People
-                                        <img src="{{ url_for('static', filename='home_bp/img/down-arrow-dark.svg') }}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+                                        <img src="{{ url_for('static', filename='home/img/down-arrow-dark.svg') }}" alt="down-arrow" class="arrow ms-auto ms-md-2">
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive mt-0 mt-lg-3 p-3 border-radius-lg" aria-labelledby="dropdownMenuDocs">
                                             <div class="d-none d-lg-block">
                                                 <ul class="list-group">
                                                     <li class="nav-item list-group-item border-0 p-0">
-                                                        <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home_bp.team') }}">
+                                                        <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home.team') }}">
                                                             <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Team</h6>
                                                             <span class="text-sm">The team behind the Toolbox!</span>
                                                         </a>
                                                     </li>
                                                     <li class="nav-item list-group-item border-0 p-0">
-                                                        <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home_bp.faculty') }}">
+                                                        <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home.faculty') }}">
                                                             <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Faculty</h6>
                                                             <span class="text-sm">Our advisors and instructors!</span>
                                                         </a>
@@ -62,11 +62,11 @@
                                             </div>
                                             <div class="row d-lg-none">
                                                 <div class="col-md-12 g-0">
-                                                    <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home_bp.team') }}">
+                                                    <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home.team') }}">
                                                         <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Team</h6>
                                                         <span class="text-sm">The team behind the Toolbox!</span>
                                                     </a>
-                                                    <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home_bp.faculty') }}">
+                                                    <a class="dropdown-item py-2 ps-3 border-radius-md" href="{{ url_for('home.faculty') }}">
                                                         <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Faculty</h6>
                                                         <span class="text-sm">Our advisors and instructors!</span>
                                                     </a>
@@ -79,7 +79,7 @@
                                         <a class="nav-link ps-2 d-flex cursor-pointer align-items-center font-weight-semibold" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="material-symbols-rounded opacity-6 me-2 text-md">article</i>
                                         Project Resources
-                                        <img src="{{ url_for('static', filename='home_bp/img/down-arrow-dark.svg') }}" alt="down-arrow" class="arrow ms-auto ms-md-2">
+                                        <img src="{{ url_for('static', filename='home/img/down-arrow-dark.svg') }}" alt="down-arrow" class="arrow ms-auto ms-md-2">
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animation dropdown-md dropdown-md-responsive p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuBlocks">
                                             <div class="d-none d-lg-block">
@@ -96,7 +96,7 @@
                                                                 <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">VEDB Respositories</h6>
                                                                 <span class="text-sm">The VEDB's contents are stored across 2 websites</span>
                                                             </div>
-                                                            <img src="{{ url_for('static', filename='home_bp/img/down-arrow.svg') }}" alt="down-arrow" class="arrow">
+                                                            <img src="{{ url_for('static', filename='home/img/down-arrow.svg') }}" alt="down-arrow" class="arrow">
                                                         </div>
                                                     </a>
                                                     <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
@@ -115,7 +115,7 @@
                                                                 <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Development</h6>
                                                                 <span class="text-sm">Relevant GitHub repositories</span>
                                                             </div>
-                                                            <img src="{{ url_for('static', filename='home_bp/img/down-arrow.svg') }}" alt="down-arrow" class="arrow">
+                                                            <img src="{{ url_for('static', filename='home/img/down-arrow.svg') }}" alt="down-arrow" class="arrow">
                                                         </div>
                                                     </a>
                                                     <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
@@ -140,7 +140,7 @@
                                                                 <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Literature</h6>
                                                                 <span class="text-sm">Technical reports, journal articles, etc.</span>
                                                             </div>
-                                                            <img src="{{ url_for('static', filename='home_bp/img/down-arrow.svg') }}" alt="down-arrow" class="arrow">
+                                                            <img src="{{ url_for('static', filename='home/img/down-arrow.svg') }}" alt="down-arrow" class="arrow">
                                                         </div>
                                                     </a>
                                                     <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
@@ -169,7 +169,7 @@
                                                             <div>
                                                                 <a href="https://link.springer.com/book/10.1007/978-3-030-20085-5" target="_blank">
                                                                     <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Project Domain Book</h6>
-                                                                </a>                                                            
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -237,12 +237,12 @@
                                     <li class="nav-item ms-lg-auto">
                                         <a class="nav-link nav-link-icon me-2" href="https://github.com/Gaskell-Matthew-1102/VEDB-Toolbox" target="_blank">
                                             <i class="fa fa-github me-1"></i>
-                                            <img src="{{ url_for('static', filename='home_bp/img/github.png') }}" width="24" height="24" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Check us out on Github" />                                        </a>
+                                            <img src="{{ url_for('static', filename='home/img/github.png') }}" width="24" height="24" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Check us out on Github" />                                        </a>
                                     </li>
                                     <!-- jinja for either "sign in" or "dashboard"/"logout"-->
                                     {% if session %}
                                     <li class="nav-item my-auto ms-3 ms-lg-0">
-                                        <a href="{{ url_for('file_upload_bp.file_upload') }}" class="btn bg-gradient-light mb-0 mt-2 mt-md-0">Enter Visualizer</a>
+                                        <a href="{{ url_for('file_upload.file_upload') }}" class="btn bg-gradient-light mb-0 mt-2 mt-md-0">Enter Visualizer</a>
                                     </li>
                                     <li class="nav-item my-auto ms-3 ms-lg-0">
                                         <a href="{{ url_for('auth_bp.logout') }}" class="btn bg-gradient-dark mb-0 mt-2 mt-md-0">Log out</a>
@@ -262,7 +262,7 @@
         </div>
 
         <header class="header-2">
-            <div class="page-header min-vh-75 relative" style="background-image: url('{{ url_for('static', filename='home_bp/img/journey_into_dataviz_feature.png') }}')">
+            <div class="page-header min-vh-75 relative" style="background-image: url('{{ url_for('static', filename='home/img/journey_into_dataviz_feature.png') }}')">
                 <span class="mask bg-gradient-dark opacity-4"></span>
                 <div class="container">
                     <div class="row">
@@ -309,6 +309,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
 
         <!-- Control Center for Material UI Kit: parallax effects, scripts for the example pages etc -->
-        <script src="{{ url_for('static', filename='home_bp/js/material-kit.min.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='home/js/material-kit.min.js') }}" type="text/javascript"></script>
     </body>
 </html>

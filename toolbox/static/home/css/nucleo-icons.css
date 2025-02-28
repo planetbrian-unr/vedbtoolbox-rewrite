@@ -2,7 +2,7 @@
 
 hermes-dashboard-icons Web Font - built using nucleoapp.com
 License - nucleoapp.com/license/
-'{{ url_for('static', filename='home_bp/fonts/nucleo-icons.eot') }}'
+'{{ url_for('static', filename='home/fonts/nucleo-icons.eot') }}'
 -------------------------------- */
 @font-face {
   font-family: 'NucleoIcons';

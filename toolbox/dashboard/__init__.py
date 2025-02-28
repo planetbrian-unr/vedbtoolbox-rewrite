@@ -2,7 +2,7 @@
 from flask import Blueprint
 
 blueprint = Blueprint(
-    "home", __name__,
+    "dashboard_bp", __name__,
     template_folder="templates",
     static_folder="static"
 )

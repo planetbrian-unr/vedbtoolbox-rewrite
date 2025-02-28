@@ -7,16 +7,19 @@ from importlib import import_module
 # flask and its plugins
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_minify import Minify
+from flask_bootstrap import Bootstrap5
+from flask_minify import Minify # mini-fies all files for better deployment
 
 # globally accessible objects
 db = SQLAlchemy()
+bootstrap = Bootstrap5()
 
 def register_extensions(app):
     db.init_app(app)
+    bootstrap.init_app(app)
 
-def register_blueprints(app, list):
-    for module_name in list:
+def register_blueprints(app, bp_list):
+    for module_name in bp_list:
         module = import_module('toolbox.{}.routes'.format(module_name))
         app.register_blueprint(module.blueprint)
 
@@ -30,11 +33,10 @@ def create_app():
     register_extensions(app)
 
     # blueprints
-    blueprint_list = ["home", "auth", "file_upload"]
+    blueprint_list = ["home", "auth", "file_upload", "visualizer", "dashboard"]
     register_blueprints(app, blueprint_list)
 
     with app.app_context():
         db.create_all()
         
     return app
-    
