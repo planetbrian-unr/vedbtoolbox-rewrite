@@ -1,5 +1,7 @@
 import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 class Config:
 	# Randomized secret key
 	SECRET_KEY = os.urandom(24)
@@ -17,3 +19,6 @@ class Config:
 	DROPZONE_UPLOAD_MULTIPLE = True
 	DROPZONE_PARALLEL_UPLOADS = 4
 	DROPZONE_ENABLE_CSRF = True
+
+	# uploads filepath
+	UPLOADS_PATH=os.path.join(basedir, 'uploads')

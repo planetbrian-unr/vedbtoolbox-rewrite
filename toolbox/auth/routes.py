@@ -16,7 +16,7 @@ from toolbox.auth.oauth import oauth
 @blueprint.route("/login")
 def login():
 	return oauth.auth0.authorize_redirect(
-		redirect_uri=url_for("auth_bp.callback", _external=True)
+		redirect_uri=url_for("auth.callback", _external=True)
 	)
 
 def add_user_to_local_db(token):
@@ -48,7 +48,6 @@ def add_user_to_local_db(token):
 		return {"status": "success", "message": "User successfully added or updated."}
 	else:
 		return {"status": "failure", "message": "User could not be added or updated."}
-
 
 
 # finalizing authentication
