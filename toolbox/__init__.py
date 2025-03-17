@@ -31,10 +31,15 @@ def register_blueprints(app, bp_list):
         app.register_blueprint(module.blueprint)
 
 
-def create_app():
+def create_app(test_config=None):
     # initialize core application
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object("toolbox.config.Config")
+
+    if test_config == None:
+        app.config.from_object("toolbox.config.Config")
+    if test_config == True:
+        app.config.from_object("toolbox.config.TestingConfig")
+
     Minify(app, html=True, js=True, cssless=True)
 
     register_extensions(app)

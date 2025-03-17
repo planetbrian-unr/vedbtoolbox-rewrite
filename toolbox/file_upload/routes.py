@@ -1,77 +1,48 @@
-# base
-from io import BytesIO
-import os
-import requests
-import zipfile
-
-# flask and its plugins
-from flask import render_template, redirect, url_for, session, request, flash
-
-# pip
-from urllib.request import Request, urlopen
+# flask
+from flask import render_template, flash
 
 # local
 from toolbox.file_upload import blueprint
 from toolbox.file_upload.forms import DatabraryURLForm, OSFURLForm
-
-def check():
-    # If the session is not available AKA the user is not logged in, redirect to home page
-    if not session:
-        return redirect("/")
-    # else do nothing
-    return None
-
-# Downloads video files from a Databrary URL
-def download_databrary_videos(link: str) -> bytes:
-    headers = {
-    'Accept': 'text/html, */*; q=0.01, gzip, deflate, br, zstd, en-US,en;q=0.9',
-    'Referer': 'https://nyu.databrary.org/volume/1612/slot/65955/zip/false',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0'
-    }
-
-    req = Request(link, headers=headers, timeout=10, verify=True)
-    
-    return urlopen(req).read()
-
-# Downloads data files from OSF 
-def download_osf_data(link: str) -> bytes:
-    response = requests.get(link)
-    if response.status_code != 200:
-        flash('Failed!')
-        raise Exception(f"Failed to download file: {response.status_code}")
-    return response.content
-
-# Extracts the zip file from the response.
-def extract_zip(response) -> bool:
-    with zipfile.ZipFile(BytesIO(response)) as zip_file:
-        zip_file.extractall(os.path.abspath(os.path.dirname(__file__)))
-    return True
-
-# Fetches data from a URL and unzips it
-def fetch_and_unzip(url_string: str, download_func):
-    try:
-        response = download_func(url_string)  # Download the content
-        extract_zip(response)  # Extract the zip file
-    except Exception as e:
-        flash(f"Error processing the URL: {e}", 'error')
+from toolbox.file_upload.methods import *
 
 @blueprint.route("/file_upload", methods=["GET", "POST"])
 def file_upload():
     # Check if the user is logged in
-    if (check_redirect := check()):
+    if (check_redirect := check() or True): # set to true for development
         return check_redirect  # Redirect if the user is not logged in
 
     # Instantiate the forms
     databraryurl = DatabraryURLForm()
     osfurl = OSFURLForm()
 
-    # Handle the form submission for Databrary URL form or OSF URL form
+    # Handle form submission for Databrary URL form
     if databraryurl.validate_on_submit():  # If Databrary form is valid
-        fetch_and_unzip(databraryurl.url.data, download_databrary_videos)
-        flash('Videos from Databrary stored!')
+        if not validate_link(databraryurl.url.data, 0):  # Validate the link for Databrary (flag 0)
+            flash("Video URL not valid! It should be a valid Databrary URL.")
+            return render_template("file_upload/file_upload.html", databraryurl=databraryurl, osfurl=osfurl)
 
+        # Attempt to fetch and unzip Databrary video files
+        extraction_path = fetch_and_unzip(download_databrary_videos, databraryurl.url.data)
+        
+        if "Error" in extraction_path:
+            flash(f"Error processing Databrary files: {extraction_path}", 'error')
+        else:
+            flash(f"Videos from Databrary stored in: {extraction_path}")
+
+    # Handle form submission for OSF URL form
     if osfurl.validate_on_submit():  # If OSF form is valid
-        fetch_and_unzip(osfurl.url.data, download_osf_data)
-        flash('Data from OSF stored!')
+        if not validate_link(osfurl.url.data, 1):  # Validate the link for OSF (flag 1)
+            flash("Data URL not valid! It should be a valid OSF URL.")
+            return render_template("file_upload/file_upload.html", databraryurl=databraryurl, osfurl=osfurl)
 
+        # Attempt to fetch and unzip OSF data files
+        extraction_path = fetch_and_unzip(download_osf_data, osfurl.url.data)
+
+        if "Error" in extraction_path:
+            flash(f"Error processing OSF files: {extraction_path}", 'error')
+        else:
+            flash(f"Data from OSF stored in: {extraction_path}")
+
+    # Render the file upload page with the forms
     return render_template("file_upload/file_upload.html", databraryurl=databraryurl, osfurl=osfurl)

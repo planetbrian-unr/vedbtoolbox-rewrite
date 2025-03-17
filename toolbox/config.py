@@ -22,3 +22,11 @@ class Config:
 
 	# uploads filepath
 	UPLOADS_PATH=os.path.join(basedir, 'uploads')
+
+class TestingConfig(Config):
+	# static secret key for testing
+	SECRET_KEY = "secret-key"
+	
+	# in-memory database for testing
+	SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+

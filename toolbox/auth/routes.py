@@ -1,5 +1,5 @@
 # base
-import os
+from os import environ as env
 
 # pip packages
 from urllib.parse import quote_plus, urlencode
@@ -16,7 +16,7 @@ from toolbox.auth.oauth import oauth
 @blueprint.route("/login")
 def login():
 	return oauth.auth0.authorize_redirect(
-		redirect_uri=url_for("auth.callback", _external=True)
+		redirect_uri = url_for("auth.callback", _external=True)
 	)
 
 def add_user_to_local_db(token):
@@ -31,9 +31,9 @@ def add_user_to_local_db(token):
 	if not user_in_db:
 		# Add new user if not already in the database
 		user_in_db = User(
-			user_id=json_user_id,
-			username=json_username,
-			email=json_email,
+			user_id = json_user_id,
+			username = json_username,
+			email = json_email,
 		)
 		db.session.add(user_in_db)
 	else:
@@ -56,22 +56,23 @@ def callback():
 	token = oauth.auth0.authorize_access_token()
 	session["user"] = token
 	
+	# take token's components and add the relevant fields to the local user db
 	add_user_to_local_db(token)
 	
-	return redirect("/")
+	# redirect to file upload page, like the original application
+	return redirect("/file_upload")
 
 
 # clearing session
 @blueprint.route("/logout")
 def logout():
 	session.clear()
+	
 	return redirect(
-		"https://" + os.environ.get("AUTH0_DOMAIN")
-		+ "/v2/logout?"
-		+ urlencode(
+		"https://" + env.get("AUTH0_DOMAIN") + "/v2/logout?" + urlencode(
 			{
 				"returnTo": url_for("home.home", _external=True),
-				"client_id": os.environ.get("AUTH0_CLIENT_ID"),
+				"client_id": env.get("AUTH0_CLIENT_ID"),
 			},
 			quote_via=quote_plus,
 		)
