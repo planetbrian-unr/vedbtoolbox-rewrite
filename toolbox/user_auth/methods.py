@@ -2,7 +2,7 @@ from toolbox import db
 from toolbox.models import User
 from sqlalchemy.exc import SQLAlchemyError
 
-def first_user() -> bool:
+def is_first_user() -> bool:
     # Only the first user is admin by default
     # Allows kickstarting without need to modify SQLite DB directly.
     return User.query.first() is None
@@ -20,10 +20,10 @@ def add_user_to_local_db(token):
         if not user_in_db:
             # Add new user if not already in the database
             new_user = User(
-                user_id=user_id,
-                username=username,
-                email=email,
-                admin=first_user()
+                user_id = user_id,
+                username = username,
+                email = email,
+                admin = is_first_user()
             )
             db.session.add(new_user)
             db.session.commit()

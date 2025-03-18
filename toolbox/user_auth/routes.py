@@ -8,9 +8,9 @@ from urllib.parse import quote_plus, urlencode
 from flask import url_for, session, redirect
 
 # local
-from toolbox.auth import blueprint
-from toolbox.auth.oauth import oauth
-from toolbox.auth.methods import add_user_to_local_db
+from toolbox.user_auth import blueprint
+from toolbox.user_auth.oauth import oauth
+from toolbox.user_auth.methods import add_user_to_local_db
 
 @blueprint.route("/login")
 def login():

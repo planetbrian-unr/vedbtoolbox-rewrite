@@ -2,5 +2,5 @@
 from flask import Blueprint
 
 blueprint = Blueprint(
-    "auth", __name__,
+    "user_auth", __name__,
 )

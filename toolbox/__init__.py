@@ -45,7 +45,7 @@ def create_app(test_config=None):
     register_extensions(app)
 
     # blueprints
-    blueprint_list = ["home", "auth", "file_upload", "visualizer", "dashboard"]
+    blueprint_list = ["home", "user_auth", "file_upload", "visualizer", "dashboard"]
     register_blueprints(app, blueprint_list)
 
     with app.app_context():
