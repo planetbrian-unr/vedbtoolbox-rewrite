@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 def is_first_user() -> bool:
     # Only the first user is admin by default
     # Allows kickstarting without need to modify SQLite DB directly.
+    # Certainly the lazy approach, but omits complex communication with the Auth0 API
     return User.query.first() is None
 
 def add_user_to_local_db(token):

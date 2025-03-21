@@ -214,6 +214,12 @@
                                                     <a class="dropdown-item ps-3 border-radius-md mb-1" href="https://github.com/creativetimofficial/material-kit" target="_blank">
                                                         Website UI Kit
                                                     </a>
+                                                    <!--
+                                                    <a class="dropdown-item ps-3 border-radius-md mb-1" href="https://demos.creative-tim.com/material-kit-pro/index" target="_blank">
+                                                        Website UI Kit, but stealing PRO assets
+                                                    </a>
+                                                    
+                                                    -->
 
                                                     <div class="d-flex mb-2 mt-3">
                                                         <div class="w-100 d-flex align-items-center justify-content-between">
@@ -252,11 +258,11 @@
                                         <a href="{{ url_for('file_upload.file_upload') }}" class="btn bg-gradient-light mb-0 mt-2 mt-md-0">Enter Visualizer</a>
                                     </li>
                                     <li class="nav-item my-auto ms-3 ms-lg-0">
-                                        <a href="{{ url_for('auth.logout') }}" class="btn bg-gradient-dark mb-0 mt-2 mt-md-0">Log out</a>
+                                        <a href="{{ url_for('user_auth.logout') }}" class="btn bg-gradient-dark mb-0 mt-2 mt-md-0">Log out</a>
                                     </li>
                                     {% else %}
                                     <li class="nav-item my-auto ms-3 ms-lg-0">
-                                        <a href="{{ url_for('auth.login') }}" class="btn bg-gradient-dark mb-0 mt-2 mt-md-0">Sign in</a>
+                                        <a href="{{ url_for('user_auth.login') }}" class="btn bg-gradient-dark mb-0 mt-2 mt-md-0">Sign in</a>
                                     </li>
                                     {% endif %}
                                 </ul>

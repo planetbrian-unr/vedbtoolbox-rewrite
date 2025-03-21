@@ -11,6 +11,15 @@ from flask import session, redirect, url_for
 import requests
 from urllib.request import Request, urlopen
 
+def remove_empty_dirs(root_dir):
+    # Recursively removes empty UUID-directories in the given root directory.
+    for dirpath, dirnames, filenames in os.walk(root_dir, topdown=False):
+        for dirname in dirnames:
+            dir_to_check = os.path.join(dirpath, dirname)
+            if not os.listdir(dir_to_check):  # Check if directory is empty
+                os.rmdir(dir_to_check)
+                print(f"Deleted empty directory: {dir_to_check}")
+
 def check():
     # If the session is not available AKA the user is not logged in, redirect to home page
     if not session:

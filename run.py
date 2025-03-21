@@ -26,7 +26,7 @@ def run_app(config_type):
         app.run(debug=True)
     elif config_type == "production":
         # Production deployment with Gunicorn
-        run_shell_command("gunicorn --workers=2 'toolbox:create_app(test_config=None)'")
+        run_shell_command("gunicorn -w 2 'toolbox:create_app(test_config=None)'")
     else:
         # Default to development configuration
         app = create_app(test_config=None)
@@ -35,3 +35,4 @@ def run_app(config_type):
 if __name__ == "__main__":
     # Run the app based on the selected configuration parsed from the command line
     run_app(parse_args().config)
+    

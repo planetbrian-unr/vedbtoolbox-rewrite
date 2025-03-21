@@ -1,16 +1,30 @@
+# base
+import os
+import uuid
+
 # flask
-from flask import render_template, flash
+from flask import render_template, flash, request
 
 # local
 from toolbox.file_upload import blueprint
 from toolbox.file_upload.forms import DatabraryURLForm, OSFURLForm
 from toolbox.file_upload.methods import *
 
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure base upload directory exists
+
+@blueprint.before_request
+def create_user_directory():
+    # cleans out empty directories before creating a new UUID-dir for each request
+    remove_empty_dirs(UPLOAD_FOLDER)
+    request.uuid = str(uuid.uuid4())  # Generate a new UUID
+    request.upload_path = os.path.join(UPLOAD_FOLDER, request.uuid)
+    os.makedirs(request.upload_path, exist_ok=True)  # Create directory
+
 @blueprint.route("/file_upload", methods=["GET", "POST"])
 def file_upload():
-    # Check if the user is logged in
-    if (check_redirect := check() or True): # set to true for development
-        return check_redirect  # Redirect if the user is not logged in
+    #if(check_redirect := check()):
+    #    return check_redirect  
 
     # Instantiate the forms
     databraryurl = DatabraryURLForm()
