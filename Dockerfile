@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # open port 8000, which is the default of gunicorn. runs it
 EXPOSE 8000
-CMD ["gunicorn", "-w", "4", "flaskr:create_app(test_config=None)"]
+CMD ["gunicorn", "-w", "4", "toolbox:create_app(test_config=None)"]
