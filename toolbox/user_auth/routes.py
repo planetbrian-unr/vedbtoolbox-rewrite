@@ -28,7 +28,7 @@ def callback():
 	add_user_to_local_db(token)
 	
 	# redirect to file upload page, like the original application
-	return redirect("/")
+	return redirect("/file_upload")
 
 
 # clearing session
