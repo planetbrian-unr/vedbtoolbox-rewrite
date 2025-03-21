@@ -7,7 +7,7 @@ class Config:
 	SECRET_KEY = os.urandom(24)
 	
 	# sqlalchemy stuff
-	SQLALCHEMY_DATABASE_URI = "sqlite:///project.sqlite"
+	SQLALCHEMY_DATABASE_URI = "sqlite:///db.sqlite3"
 	SQLALCHEMY_ECHO = False
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	
@@ -19,9 +19,6 @@ class Config:
 	DROPZONE_UPLOAD_MULTIPLE = True
 	DROPZONE_PARALLEL_UPLOADS = 4
 	DROPZONE_ENABLE_CSRF = True
-
-	# uploads filepath
-	UPLOADS_PATH=os.path.join(basedir, 'uploads')
 
 class TestingConfig(Config):
 	# static secret key for testing
