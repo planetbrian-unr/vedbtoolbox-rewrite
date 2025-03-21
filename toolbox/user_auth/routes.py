@@ -15,7 +15,7 @@ from toolbox.user_auth.methods import add_user_to_local_db
 @blueprint.route("/login")
 def login():
 	return oauth.auth0.authorize_redirect(
-		redirect_uri = url_for("auth.callback", _external=True)
+		redirect_uri = url_for("user_auth.callback", _external=True)
 	)
 
 # finalizing authentication

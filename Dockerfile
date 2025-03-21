@@ -8,8 +8,11 @@ COPY LICENSE .
 COPY toolbox ./toolbox
 
 # install necessary stuff not in image & the application's pip requirements
-RUN apt update && apt install -y libgl1
-RUN pip install --no-cache-dir -r requirements.txt
+RUN <<EOF
+    apt update
+    apt install -y libgl1
+    pip install --no-cache-dir -r requirements.txt
+EOF
 
 # open port 8000, which is the default of gunicorn. runs it
 EXPOSE 8000
