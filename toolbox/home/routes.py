@@ -3,9 +3,12 @@ from flask import render_template
 
 # local
 from toolbox.home import blueprint
+from toolbox.home.methods import *
 
 @blueprint.route("/")
 def home():
+    if(check_redirect := check()):
+        return check_redirect 
     return render_template("home/home.html")
 
 @blueprint.route("/team")

@@ -23,8 +23,8 @@ def create_user_directory():
 
 @blueprint.route("/file_upload", methods=["GET", "POST"])
 def file_upload():
-    #if(check_redirect := check()):
-    #    return check_redirect  
+    if(check_redirect := check()):
+        return check_redirect  
 
     # Instantiate the forms
     databraryurl = DatabraryURLForm()
