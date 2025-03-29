@@ -1,6 +1,6 @@
 # rm_empty_dirs, check are written by brian
 # validate link, download funcs are entirely matt's work
-# fetch_&_unzip is a rewrite for more "generalized" handling
+# fetch_&_unzip is a rewrite by brian for more "generalized" handling
 
 # base
 import os
@@ -14,13 +14,12 @@ from flask import session, redirect, url_for
 import requests
 from urllib.request import Request, urlopen
 
-
 # Recursively removes empty (checks) UUID-directories in the given root directory.
 def remove_empty_dirs(root_dir):
     for dirpath, dirnames, filenames in os.walk(root_dir, topdown=False):
         for dirname in dirnames:
             dir_to_check = os.path.join(dirpath, dirname)
-            if not os.listdir(dir_to_check):
+            if not os.listdir(str(dir_to_check)):
                 os.rmdir(dir_to_check)
                 print(f"Deleted empty directory: {dir_to_check}")
 
@@ -38,18 +37,15 @@ def validate_link(link: str, flag: int) -> bool:
         return False
     if "nyu.databrary.org" not in link and flag == 0:
         return False
-    # Passes first check, still forced to hit others (exception)
     return True
 
 # Helper function to download video files from a Databrary URL
 def download_databrary_videos(link: str) -> bytes:
-    headers = {
+    return urlopen(Request(link, headers= {
         'Accept': 'text/html, */*; q=0.01, gzip, deflate, br, zstd, en-US, en; q=0.9',
         'Referer': 'https://nyu.databrary.org/volume/1612/slot/65955/zip/false',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0'
-    }
-    req = Request(link, headers=headers, timeout=10, verify=True)
-    return urlopen(req).read()
+    })).read()
 
 # Helper function to download data files from OSF
 def download_osf_data(link: str) -> bytes:

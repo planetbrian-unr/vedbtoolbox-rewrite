@@ -1,3 +1,6 @@
+# written by brian, a "quick" dockerfile used for containerized deployment
+# not quite fully functional; seems to be a thing with proxies
+
 # slim is not used!
 FROM python:bookworm
 
