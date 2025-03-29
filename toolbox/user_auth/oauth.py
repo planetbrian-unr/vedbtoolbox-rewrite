@@ -1,3 +1,6 @@
+# unchanged from the auth0 tutorial
+# https://auth0.com/docs/quickstart/webapp/python/interactive
+
 # base
 from os import environ as env
 

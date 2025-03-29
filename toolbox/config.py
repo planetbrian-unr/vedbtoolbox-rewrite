@@ -1,3 +1,7 @@
+# written by brian
+# used with the test_config parameter of create_app
+
+# base
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -26,4 +30,3 @@ class TestingConfig(Config):
 	
 	# in-memory database for testing
 	SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
-

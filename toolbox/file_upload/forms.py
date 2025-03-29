@@ -1,5 +1,11 @@
-# flask + pip
+# written by brian
+# defined basic URL input fields as to avoid literally creating a HTML form
+# avoids directly checking POST requests in routes.py.
+
+# flask (plugins)
 from flask_wtf import FlaskForm
+
+# pip. used for above
 from wtforms import URLField, SubmitField
 from wtforms.validators import URL
 

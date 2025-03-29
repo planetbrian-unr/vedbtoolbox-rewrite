@@ -1,7 +1,7 @@
 {% extends 'home/base.jinja' %}
 
 {% block header %}
-    <h1>{% block title %}404{% endblock %}</h1>
+    <h1>{% block title %}500{% endblock %}</h1>
 {% endblock %}
 
 {% block image_header_size %}
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block bodyheading %}
-    <h1 class="text-white font-weight-black pt-3 mt-n5">Error 404: Page not found...</h1>
+    <h1 class="text-white font-weight-black pt-3 mt-n5">Error 500: Something went wrong...</h1>
     <p class="lead text-white mt-3">You will be redirected to the homepage shortly.<br/>If that doesn't work, click the button below to go back to the homepage.</p>
     <button type="button" class="btn bg-gradient-warning mt-4" onclick="window.location.href='/'">
     Homepage

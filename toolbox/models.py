@@ -1,7 +1,17 @@
-from toolbox import db
+# written by brian.
+# database models relevant to the program. explanations:
+#   User is to store user credentials returned from the auth0 json.
+#    - During use, the json is stored in the Flask session, so we can use that to creat queries
+#   SessionHistory stores a UUID as its PK, which corresponds to a subfolder in 'uploads'
+#	 - During use, files are uploaded to that directory
+#    - Files stay there, allowing the user to delete whole "sessions" at their discretion
+
+# pip packages. connected to Flask-SQLAlchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
+# local
+from toolbox import db
 
 class User(db.Model):
 	__tablename__ = "users"
@@ -12,22 +22,13 @@ class User(db.Model):
 	email = db.Column(db.String, unique=True, nullable=False)
 	admin = db.Column(db.Boolean, nullable=False, default=False)
 
-	# Define relationships to session histories (URLs and filepaths)
+	# Define relationships to session histories (UUID-folderpaths)
 	session_histories = relationship("SessionHistory", backref="user", lazy=True)
-
 
 class SessionHistory(db.Model):
 	__tablename__ = "session_history"
 
-	# metadata
-	session_id = db.Column(db.Integer, primary_key=True)
+	# metadata; session_id is actually a UUID with a corresponding folder in uploads/
+	session_id = db.Column(db.String, primary_key=True)
 	user_id = db.Column(db.String, ForeignKey("users.user_id"), nullable=False)
 	session_name = db.Column(db.String, nullable=True, default="VEDB Session")
-
-	# data
-	osf_url = db.Column(db.String, nullable=True)
-	data_filepath = db.Column(db.String, nullable=True)
-
-	# videos
-	databrary_url = db.Column(db.String, nullable=True)
-	video_filepath = db.Column(db.String, nullable=True)

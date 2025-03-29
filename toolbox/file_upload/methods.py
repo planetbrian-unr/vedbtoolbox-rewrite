@@ -1,5 +1,8 @@
+# rm_empty_dirs, check are written by brian
+# validate link, download funcs are entirely matt's work
+# fetch_&_unzip is a rewrite for more "generalized" handling
+
 # base
-import uuid
 import os
 import zipfile
 from io import BytesIO
@@ -11,20 +14,20 @@ from flask import session, redirect, url_for
 import requests
 from urllib.request import Request, urlopen
 
+
+# Recursively removes empty (checks) UUID-directories in the given root directory.
 def remove_empty_dirs(root_dir):
-    # Recursively removes empty UUID-directories in the given root directory.
     for dirpath, dirnames, filenames in os.walk(root_dir, topdown=False):
         for dirname in dirnames:
             dir_to_check = os.path.join(dirpath, dirname)
-            if not os.listdir(dir_to_check):  # Check if directory is empty
+            if not os.listdir(dir_to_check):
                 os.rmdir(dir_to_check)
                 print(f"Deleted empty directory: {dir_to_check}")
 
+# If the session is not available AKA the user is not logged in, redirect to home page. else proceed
 def check():
-    # If the session is not available AKA the user is not logged in, redirect to home page
     if not session:
         return redirect("/")
-    # else do nothing
     return None
 
 # This function validates that the link submitted is an actual link, and goes to the correct website with downloadable (can't really go further)
@@ -55,23 +58,29 @@ def download_osf_data(link: str) -> bytes:
         raise Exception(f"Failed to download file: {response.status_code}")
     return response.content
 
-# Helper function to unzip content into a unique directory
-def fetch_and_unzip(download_func, url_string: str) -> str:
+# Helper function to unzip content into a specified directory (likely the UUID folder)
+def fetch_and_unzip(download_func, url_string: str, unzip_to: str) -> str:
     try:
-        # Generate a random folder name
-        base_directory = "uploads"
-        random_folder_name = str(uuid.uuid4())
+        # Download the content (from URL)
+        if url_string.startswith("https"):  # Assuming a URL starts with 'https'
+            # Download the content
+            if download_func == download_databrary_videos:
+                response = download_func(url_string)
+            elif download_func == download_osf_data:
+                response = download_func(url_string)
+            else:
+                raise Exception("Unknown download function")
 
-        # Ensure the directory exists
-        os.makedirs(os.path.join(base_directory, random_folder_name))
+            # Unzip the content to the specified directory
+            with zipfile.ZipFile(BytesIO(response)) as zip_file:
+                zip_file.extractall(unzip_to)
+        else:  # It's assumed to be a local file path
+            # Read the zip file from the local path
+            with open(url_string, 'rb') as local_file:
+                with zipfile.ZipFile(local_file) as zip_file:
+                    zip_file.extractall(unzip_to)
 
-        # Download the content
-        response = download_func(url_string)
+        return unzip_to  # Return the path where files are unzipped
 
-        # Unzip the content to the specified directory
-        with zipfile.ZipFile(BytesIO(response)) as zip_file:
-            zip_file.extractall(os.path.join(base_directory, random_folder_name))
-
-        return os.path.join(base_directory, random_folder_name)
     except Exception as e:
         return str(e)  # Return error message

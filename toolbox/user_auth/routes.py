@@ -1,3 +1,6 @@
+# modified by brian to suit our purposes based on the Auth0 Flask tutorial
+# found here: https://auth0.com/docs/quickstart/webapp/python/interactive
+
 # base
 from os import environ as env
 
@@ -12,13 +15,14 @@ from toolbox.user_auth import blueprint
 from toolbox.user_auth.oauth import oauth
 from toolbox.user_auth.methods import add_user_to_local_db
 
+# login, goes to auth0 page to handle everything
 @blueprint.route("/login")
 def login():
 	return oauth.auth0.authorize_redirect(
 		redirect_uri = url_for("user_auth.callback", _external=True)
 	)
 
-# finalizing authentication
+# finalizing authentication. brian changed it
 @blueprint.route("/callback")
 def callback():
 	token = oauth.auth0.authorize_access_token()

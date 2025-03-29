@@ -1,10 +1,14 @@
-from toolbox import db
-from toolbox.models import User
+# written by brian, with help from chatgpt on how to parse the returned JSON and exception handling (unlikely)
+
+# pip
 from sqlalchemy.exc import SQLAlchemyError
 
+# local
+from toolbox import db
+from toolbox.models import User
+
 def is_first_user() -> bool:
-    # Only the first user is admin by default
-    # Allows kickstarting without need to modify SQLite DB directly.
+    # Only the first user is admin by default, thus avoiding modifying the SQLite DB directly
     # Certainly the lazy approach, but omits complex communication with the Auth0 API
     return User.query.first() is None
 
