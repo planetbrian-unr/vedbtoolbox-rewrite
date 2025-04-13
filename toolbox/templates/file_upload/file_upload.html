@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block css %}
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
@@ -53,7 +54,7 @@
                         <div class="tab-content mt-4">
                             <!-- My Profile Tab -->
                             <div class="tab-pane fade show active" id="dtb_file_upload" role="tabpanel">
-                                <p>This is the My Profile tab content.</p>
+                                <input type="dtb_file_upload" />
                             </div>
     
                             <!-- Dashboard Tab with Form -->
@@ -91,26 +92,29 @@
         </div>
     </section>
 
-    {% if data_submitted and videos_submitted %}
     <section>
         <div class="container py-1 mt-3">
             <div class="row justify-space-between text-center py-2">
                 <div class="col-12 mx-auto">
-                    <form action="{{ url_for('visualizer.visualizer') }}" method="POST">
+                    {% if data_submitted and videos_submitted %}
+                    <form method="POST" action="{{ url_for('visualizer.visualizer') }}">
                         {{ visualizer_button.hidden_tag() }}
-
-                        <button type="submit" class="btn bg-gradient-dark btn-icon btn-lg">
+                        <button type="submit" class="btn bg-gradient-dark btn-icon btn-lg" name="{{ visualizer_button.submit.name }}">
                             <div class="d-flex align-items-center">
                                 {{ visualizer_button.submit.label.text }}
                                 <i class="material-symbols-rounded ms-2" aria-hidden="true">developer_board</i>
                             </div>
                         </button>
                     </form>
+                    {% else %}
+                    <div class="alert alert-secondary text-white font-weight-bold" role="alert">
+                          Complete both video and file upload to proceed to the visualizer
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </section>
-    {% endif %}
 
     <!-- datafile upload -->
     <section>
@@ -119,7 +123,7 @@
                 <div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
                     <div class="card d-flex justify-content-center p-4 shadow-lg">
                         <div class="text-center">
-                            <h3 class="text-gradient text-primary">Video Upload</h3>
+                            <h3 class="text-gradient text-primary">Data Upload</h3>
                             <p class="mb-0">
                                 Session sensor data files are found at the Open Science Framework via the link under Project Resources.
                                 You can download a .ZIP file (containing many .NPY and .PLDATA files), and upload its contents.
@@ -158,7 +162,7 @@
                         <div class="tab-content mt-4">
                             <!-- My Profile Tab -->
                             <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
-                                <p>This is the My Profile tab content.</p>
+                                <input type="osf_file_upload" />
                             </div>
 
                             <!-- Dashboard Tab with Form -->
@@ -198,4 +202,14 @@
 {% endblock %}
 
 {% block js %}
+    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+    <script>
+    // Get a reference to the file input element
+    const osf_file_upload_input_element = document.querySelector('input[type="osf_file_upload"]');
+    const dtb_file_upload_input_element = document.querySelector('input[type="dtb_file_upload"]');
+
+    // Create a FilePond instance
+    const osf_pond = FilePond.create(osf_file_upload_input_element);
+    const dtb_pond = FilePond.create(dtb_file_upload_input_element);
+</script>
 {% endblock %}

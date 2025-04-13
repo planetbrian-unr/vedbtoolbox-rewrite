@@ -8,7 +8,7 @@ import zipfile
 from io import BytesIO
 
 # flask
-from flask import session, redirect, request
+from flask import session, redirect
 
 # pip
 import requests
@@ -59,6 +59,7 @@ def validate_link(link: str, flag: int) -> bool:
     return netloc == expected_domain or netloc.endswith(f".{expected_domain}")
 
 # Helper function to download video files from a Databrary URL
+# NOTE!! UNTESTED!! DATABRARY IS NOT KIND
 def download_databrary_videos(link: str) -> bytes:
     headers = {
         'Accept': 'text/html, */*; q=0.01, gzip, deflate, br, zstd, en-US, en; q=0.9',
@@ -77,29 +78,47 @@ def download_osf_data(link: str) -> bytes:
 # Helper function to unzip content into a specified directory (likely the UUID folder)
 def fetch_and_unzip(download_func, url_string: str, unzip_to: str) -> str:
     try:
-        # Download the content (from URL)
-        if url_string.startswith("https"):  # Assuming a URL starts with 'https'
-            # Download the content
-            if download_func == download_databrary_videos:
-                response = download_func(url_string)
-            elif download_func == download_osf_data:
-                response = download_func(url_string)
-            else:
-                raise Exception("Unknown download function")
+        if url_string.startswith("https"):
+            response = download_func(url_string)
+            zip_data = BytesIO(response)
+        else:
+            zip_data = open(url_string, 'rb')
 
-            # Unzip the content to the specified directory
-            with zipfile.ZipFile(BytesIO(response)) as zip_file:
-                zip_file.extractall(unzip_to)
-        else:  # It's assumed to be a local file path
-            # Read the zip file from the local path
-            with open(url_string, 'rb') as local_file:
-                with zipfile.ZipFile(local_file) as zip_file:
-                    zip_file.extractall(unzip_to)
+        with zipfile.ZipFile(zip_data) as zip_file:
+            # Get all file paths in the zip
+            all_paths = zip_file.namelist()
 
-        return unzip_to  # Return the path where files are unzipped
+            # Detect the common top-level directory (if any)
+            top_dirs = set(p.split('/')[0] for p in all_paths if '/' in p and not p.startswith('__MACOSX'))
+            common_prefix = top_dirs.pop() if len(top_dirs) == 1 else ''
+
+            for member in zip_file.infolist():
+                original_path = member.filename
+
+                # Skip directories
+                if member.is_dir():
+                    continue
+
+                # Remove the top-level directory
+                if common_prefix and original_path.startswith(common_prefix + '/'):
+                    relative_path = original_path[len(common_prefix)+1:]
+                else:
+                    relative_path = original_path
+
+                # Construct the final output path
+                target_path = os.path.join(unzip_to, relative_path)
+
+                # Ensure parent dirs exist
+                os.makedirs(os.path.dirname(target_path), exist_ok=True)
+
+                # Write the file
+                with zip_file.open(member) as source, open(target_path, "wb") as target:
+                    target.write(source.read())
+
+        return unzip_to
 
     except Exception as e:
-        return str(e)  # Return error message
+        return str(e)
 
 # Add new session to database (after successful dual upload)
 def add_session_to_db(uuidfolder: str):
