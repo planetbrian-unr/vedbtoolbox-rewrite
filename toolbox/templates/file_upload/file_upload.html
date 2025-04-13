@@ -22,26 +22,69 @@
                                 Alternatively, simply input the .ZIP file link into the form.
                             </p>
                         </div>
-                        <div class="card card-plain">
-                            <form role="form" id="contact-form" method="post" autocomplete="off">
-                                <div class="card-body pb-2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="input-group input-group-static mb-4">
-                                                <label>Databrary URL</label>
-                                                <input class="form-control" placeholder="e.g., John Mitch" aria-label="Databrary URL" type="url" />
+    
+                        <!-- Add some margin-top to create space between the explanation and tabs -->
+                        <div class="nav-wrapper position-relative end-0 mt-4">
+                            <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center active"
+                                       data-bs-toggle="tab"
+                                       href="#dtb_file_upload"
+                                       role="tab"
+                                       aria-controls="dtb_file_upload"
+                                       aria-selected="true">
+                                        <i class="material-symbols-rounded text-sm me-2">folder_open</i> File Upload
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center"
+                                       data-bs-toggle="tab"
+                                       href="#dtb_url_entry"
+                                       role="tab"
+                                       aria-controls="dtb_url_entry"
+                                       aria-selected="false">
+                                        <i class="material-symbols-rounded text-sm me-2">public</i> URL entry
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+    
+                        <!-- Tab Content -->
+                        <div class="tab-content mt-4">
+                            <!-- My Profile Tab -->
+                            <div class="tab-pane fade show active" id="dtb_file_upload" role="tabpanel">
+                                <p>This is the My Profile tab content.</p>
+                            </div>
+    
+                            <!-- Dashboard Tab with Form -->
+                            <div class="tab-pane fade" id="dtb_url_entry" role="tabpanel">
+                                <div class="card card-plain">
+                                    <form role="form" id="contact-form" method="post" autocomplete="off">
+                                        <div class="card-body pb-2">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group input-group-static mb-4">
+                                                        {{ databraryurl.csrf_token }}
+                                                        {{ databraryurl.url.label(class="form-label") }}
+                                                        {{ databraryurl.url(class="form-control", aria_label="Databrary URL") }}
+    
+                                                        {% for error in databraryurl.url.errors %}
+                                                            <div class="text-danger">{{ error }}</div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 text-center d-flex justify-content-center gap-3">
+                                                    {{ databraryurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 text-center d-flex justify-content-center gap-3">
-                                            <!-- Download from URL Button -->
-                                            <button type="submit" class="btn bg-gradient-dark mt-3 mb-0">Download from URL</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
+    
                     </div>
                 </div>
             </div>
@@ -53,10 +96,12 @@
         <div class="container py-1 mt-3">
             <div class="row justify-space-between text-center py-2">
                 <div class="col-12 mx-auto">
-                    <form action="/visualizer" method="POST">
-                        <button class="btn bg-gradient-dark btn-icon btn-lg" type="submit">
+                    <form action="{{ url_for('visualizer.visualizer') }}" method="POST">
+                        {{ visualizer_button.hidden_tag() }}
+
+                        <button type="submit" class="btn bg-gradient-dark btn-icon btn-lg">
                             <div class="d-flex align-items-center">
-                                Enter Visualizer
+                                {{ visualizer_button.submit.label.text }}
                                 <i class="material-symbols-rounded ms-2" aria-hidden="true">developer_board</i>
                             </div>
                         </button>
@@ -74,7 +119,7 @@
                 <div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
                     <div class="card d-flex justify-content-center p-4 shadow-lg">
                         <div class="text-center">
-                            <h3 class="text-gradient text-primary">Data Upload</h3>
+                            <h3 class="text-gradient text-primary">Video Upload</h3>
                             <p class="mb-0">
                                 Session sensor data files are found at the Open Science Framework via the link under Project Resources.
                                 You can download a .ZIP file (containing many .NPY and .PLDATA files), and upload its contents.
@@ -82,25 +127,69 @@
                                 Also, please upload the gaze.npz from the processedGaze folder.
                             </p>
                         </div>
-                        <div class="card card-plain">
-                            <form role="form" id="contact-form" method="post" autocomplete="off">
-                                <div class="card-body pb-2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="input-group input-group-static mb-4">
-                                                <label>OSF URL</label>
-                                                <input class="form-control" placeholder="e.g., https://osf.io/download/puvmg/" aria-label="OSF URL" type="url" />
+
+                        <!-- Add some margin-top to create space between the explanation and tabs -->
+                        <div class="nav-wrapper position-relative end-0 mt-4">
+                            <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center active"
+                                       data-bs-toggle="tab"
+                                       href="#osf_file_upload"
+                                       role="tab"
+                                       aria-controls="osf_file_upload"
+                                       aria-selected="true">
+                                        <i class="material-symbols-rounded text-sm me-2">folder_open</i> File Upload
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center"
+                                       data-bs-toggle="tab"
+                                       href="#osf_url_entry"
+                                       role="tab"
+                                       aria-controls="osf_url_entry"
+                                       aria-selected="false">
+                                        <i class="material-symbols-rounded text-sm me-2">public</i> URL entry
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content mt-4">
+                            <!-- My Profile Tab -->
+                            <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
+                                <p>This is the My Profile tab content.</p>
+                            </div>
+
+                            <!-- Dashboard Tab with Form -->
+                            <div class="tab-pane fade" id="osf_url_entry" role="tabpanel">
+                                <div class="card card-plain">
+                                    <form role="form" id="contact-form" method="post" autocomplete="off">
+                                        <div class="card-body pb-2">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group input-group-static mb-4">
+                                                        {{ osfurl.csrf_token }}
+                                                        {{ osfurl.url.label(class="form-label") }}
+                                                        {{ osfurl.url(class="form-control", aria_label="Databrary URL") }}
+
+                                                        {% for error in osfurl.url.errors %}
+                                                            <div class="text-danger">{{ error }}</div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 text-center d-flex justify-content-center gap-3">
+                                                    {{ osfurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 text-center">
-                                            <button type="submit" class="btn bg-gradient-dark mt-3 mb-0">Download from URL</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

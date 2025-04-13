@@ -13,16 +13,16 @@ from importlib import import_module
 # flask and its plugins
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_bootstrap import Bootstrap5
 from flask_minify import Minify
+from flask_wtf.csrf import CSRFProtect
 
 # globally accessible objects
 db = SQLAlchemy()
-bootstrap = Bootstrap5()
+csrf = CSRFProtect()
 
 def register_extensions(app):
     db.init_app(app)
-    bootstrap.init_app(app)
+    csrf.init_app(app)
 
 def register_blueprints(app, bp_list):
     for module_name in bp_list:

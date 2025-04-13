@@ -15,7 +15,6 @@ import requests
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 from sqlalchemy.exc import SQLAlchemyError
-from validators import url
 
 # local
 from toolbox import db
@@ -43,15 +42,12 @@ def is_admin():
 
 # This function validates that the link submitted is an actual link, and goes to the correct website with downloadable (can't really go further)
 def validate_link(link: str, flag: int) -> bool:
-    if not url(link):
-        return False
-
     # Extract domain (netloc) from the link
     netloc = urlparse(link).netloc.lower()
 
     # Match the domain based on the flag using a dictionary
     expected_domains = {
-        0: "nyu.databrary.org",
+        0: "databrary.org",
         1: "osf.io"
     }
     expected_domain = expected_domains.get(flag)
@@ -66,7 +62,7 @@ def validate_link(link: str, flag: int) -> bool:
 def download_databrary_videos(link: str) -> bytes:
     headers = {
         'Accept': 'text/html, */*; q=0.01, gzip, deflate, br, zstd, en-US, en; q=0.9',
-        'Referer': 'https://nyu.databrary.org/volume/1612/slot/65955/zip/false',
+        'Referer': 'https://databrary.org/volume/1612/slot/65955/zip/false',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0'
     }
     return urlopen(Request(link, headers=headers)).read()
