@@ -39,21 +39,24 @@ class LinkDomainValidator:
 
 # Form for Databrary URLs
 class DatabraryURLForm(FlaskForm):
-    url = URLField("Databrary URL", validators=[
+    dtb_url = URLField("Databrary URL", validators=[
         DataRequired(),
         URL(),
         LinkDomainValidator(flag=0, message="URL must be from databrary.org")]
     )
-    submit = SubmitField("Submit URL")
+    dtb_submit = SubmitField("Submit URL")
 
 # Form for OSF URLs
 class OSFURLForm(FlaskForm):
-    url = URLField("OSF URL", validators=[
+    osf_url = URLField("OSF URL", validators=[
         DataRequired(),
         URL(),
         LinkDomainValidator(flag=1, message="URL must be from osf.io")]
     )
-    submit = SubmitField("Submit URL")
+    osf_submit = SubmitField("Submit URL")
     
 class EnterVisualizer(FlaskForm):
     submit = SubmitField("Enter Visualizer")
+    
+class ResetFileUpload(FlaskForm):
+    reset = SubmitField("Remove all uploaded files and restart")

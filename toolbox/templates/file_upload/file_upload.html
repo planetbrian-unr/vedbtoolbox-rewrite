@@ -65,14 +65,14 @@
                                     <div class="card-body pb-2">
                                         <div class="input-group input-group-static mb-4">
                                             {{ databraryurl.csrf_token }}
-                                            {{ databraryurl.url.label(class="form-label") }}
-                                            {{ databraryurl.url(class="form-control", aria_label="Databrary URL") }}
-                                            {% for error in databraryurl.url.errors %}
+                                            {{ databraryurl.dtb_url.label(class="form-label") }}
+                                            {{ databraryurl.dtb_url(class="form-control", aria_label="Databrary URL") }}
+                                            {% for error in databraryurl.dtb_url.errors %}
                                                 <div class="text-danger">{{ error }}</div>
                                             {% endfor %}
                                         </div>
                                         <div class="text-center">
-                                            {{ databraryurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
+                                            {{ databraryurl.dtb_submit(class="btn bg-gradient-dark mt-3 mb-0") }}
                                         </div>
                                     </div>
                                 </form>
@@ -126,14 +126,14 @@
                                     <div class="card-body pb-2">
                                         <div class="input-group input-group-static mb-4">
                                             {{ osfurl.csrf_token }}
-                                            {{ osfurl.url.label(class="form-label") }}
-                                            {{ osfurl.url(class="form-control", aria_label="OSF URL") }}
-                                            {% for error in osfurl.url.errors %}
+                                            {{ osfurl.osf_url.label(class="form-label") }}
+                                            {{ osfurl.osf_url(class="form-control", aria_label="OSF URL") }}
+                                            {% for error in osfurl.osf_url.errors %}
                                                 <div class="text-danger">{{ error }}</div>
                                             {% endfor %}
                                         </div>
                                         <div class="text-center">
-                                            {{ osfurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
+                                            {{ osfurl.osf_submit(class="btn bg-gradient-dark mt-3 mb-0") }}
                                         </div>
                                     </div>
                                 </form>
@@ -145,25 +145,40 @@
         </div>
     </section>
 
-    {% if data_submitted and videos_submitted %}
     <section>
         <div class="container py-1 mt-3">
-            <div class="row justify-space-between text-center py-2">
-                <div class="col-12 mx-auto">
-                    <form method="POST" action="{{ url_for('visualizer.visualizer') }}">
-                        {{ visualizer_button.hidden_tag() }}
-                        <button type="submit" class="btn bg-gradient-dark btn-icon btn-lg" name="{{ visualizer_button.submit.name }}">
-                            <div class="d-flex align-items-center">
-                                {{ visualizer_button.submit.label.text }}
-                                <i class="material-symbols-rounded ms-2" aria-hidden="true">developer_board</i>
-                            </div>
-                        </button>
-                    </form>
+            <div class="row justify-content-center text-center py-2">
+                <div class="col-auto">
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        {% if data_submitted and videos_submitted %}
+                        <form method="POST" action="{{ url_for('visualizer.visualizer') }}">
+                            {{ visualizer_button.hidden_tag() }}
+                            <button type="submit" class="btn bg-gradient-dark btn-icon btn-lg" name="{{ visualizer_button.submit.name }}">
+                                <div class="d-flex align-items-center">
+                                    {{ visualizer_button.submit.label.text }}
+                                    <i class="material-symbols-rounded ms-2" aria-hidden="true">developer_board</i>
+                                </div>
+                            </button>
+                        </form>
+                        {% endif %}
+
+                        <form method="POST" action="{{ url_for('file_upload.file_upload') }}">
+                            {{ reset_button.hidden_tag() }}
+                                <button type="submit"
+                                        class="btn bg-gradient-dark btn-icon btn-lg"
+                                        name="{{ reset_button.reset.name }}"
+                                        value="1">
+                                    <div class="d-flex align-items-center">
+                                        {{ reset_button.reset.label.text }}
+                                        <i class="material-symbols-rounded ms-2" aria-hidden="true">delete</i>
+                                    </div>
+                                </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    {% endif %}
 {% endblock %}
 
 {% block js %}
