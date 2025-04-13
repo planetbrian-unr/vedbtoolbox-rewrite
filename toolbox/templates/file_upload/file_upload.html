@@ -9,11 +9,19 @@
 {% endblock %}
 
 {% block content %}
-    <!-- video upload -->
+    <!-- video upload and data upload side-by-side -->
     <section>
         <div class="container py-4">
-            <div class="row">
-                <div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
+            <div class="row justify-content-center">
+                <!-- notice about file upload -->
+                                    <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
+                            <strong>Notice!</strong> You must upload both video and data files before proceeding to the visualizer
+                            <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                <!-- Video Upload Card -->
+                <div class="col-lg-6 d-flex justify-content-center flex-column mb-4 mb-lg-0">
                     <div class="card d-flex justify-content-center p-4 shadow-lg">
                         <div class="text-center">
                             <h3 class="text-gradient text-primary">Video Upload</h3>
@@ -23,80 +31,125 @@
                                 Alternatively, simply input the .ZIP file link into the form.
                             </p>
                         </div>
-    
-                        <!-- Add some margin-top to create space between the explanation and tabs -->
+
                         <div class="nav-wrapper position-relative end-0 mt-4">
                             <ul class="nav nav-pills nav-fill p-1" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center active"
+                                    <a class="nav-link active"
                                        data-bs-toggle="tab"
                                        href="#dtb_file_upload"
                                        role="tab"
-                                       aria-controls="dtb_file_upload"
                                        aria-selected="true">
                                         <i class="material-symbols-rounded text-sm me-2">folder_open</i> File Upload
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center"
+                                    <a class="nav-link"
                                        data-bs-toggle="tab"
                                        href="#dtb_url_entry"
                                        role="tab"
-                                       aria-controls="dtb_url_entry"
                                        aria-selected="false">
-                                        <i class="material-symbols-rounded text-sm me-2">public</i> URL entry
+                                        <i class="material-symbols-rounded text-sm me-2">public</i> URL Entry
                                     </a>
                                 </li>
                             </ul>
                         </div>
-    
-                        <!-- Tab Content -->
+
                         <div class="tab-content mt-4">
-                            <!-- My Profile Tab -->
                             <div class="tab-pane fade show active" id="dtb_file_upload" role="tabpanel">
                                 <input type="dtb_file_upload" />
                             </div>
-    
-                            <!-- Dashboard Tab with Form -->
+
                             <div class="tab-pane fade" id="dtb_url_entry" role="tabpanel">
-                                <div class="card card-plain">
-                                    <form role="form" id="contact-form" method="post" autocomplete="off">
-                                        <div class="card-body pb-2">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="input-group input-group-static mb-4">
-                                                        {{ databraryurl.csrf_token }}
-                                                        {{ databraryurl.url.label(class="form-label") }}
-                                                        {{ databraryurl.url(class="form-control", aria_label="Databrary URL") }}
-    
-                                                        {% for error in databraryurl.url.errors %}
-                                                            <div class="text-danger">{{ error }}</div>
-                                                        {% endfor %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12 text-center d-flex justify-content-center gap-3">
-                                                    {{ databraryurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
-                                                </div>
-                                            </div>
+                                <form role="form" method="post" autocomplete="off">
+                                    <div class="card-body pb-2">
+                                        <div class="input-group input-group-static mb-4">
+                                            {{ databraryurl.csrf_token }}
+                                            {{ databraryurl.url.label(class="form-label") }}
+                                            {{ databraryurl.url(class="form-control", aria_label="Databrary URL") }}
+                                            {% for error in databraryurl.url.errors %}
+                                                <div class="text-danger">{{ error }}</div>
+                                            {% endfor %}
                                         </div>
-                                    </form>
-                                </div>
+                                        <div class="text-center">
+                                            {{ databraryurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-    
+                    </div>
+                </div>
+
+                <!-- Data Upload Card -->
+                <div class="col-lg-6 d-flex justify-content-center flex-column">
+                    <div class="card d-flex justify-content-center p-4 shadow-lg">
+                        <div class="text-center">
+                            <h3 class="text-gradient text-primary">Data Upload</h3>
+                            <p class="mb-0">
+                                Download the session sensor data (.ZIP with .NPY and .PLDATA files) from the OSF link under Project Resources,
+                                then upload its contents here. Also upload the gaze.npz file from the processedGaze folder.
+                                Alternatively, paste the ZIP file URL below.
+                            </p>
+                        </div>
+
+                        <div class="nav-wrapper position-relative end-0 mt-4">
+                            <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active"
+                                       data-bs-toggle="tab"
+                                       href="#osf_file_upload"
+                                       role="tab"
+                                       aria-selected="true">
+                                        <i class="material-symbols-rounded text-sm me-2">folder_open</i> File Upload
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       data-bs-toggle="tab"
+                                       href="#osf_url_entry"
+                                       role="tab"
+                                       aria-selected="false">
+                                        <i class="material-symbols-rounded text-sm me-2">public</i> URL Entry
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content mt-4">
+                            <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
+                                <input type="osf_file_upload" />
+                            </div>
+
+                            <div class="tab-pane fade" id="osf_url_entry" role="tabpanel">
+                                <form role="form" method="post" autocomplete="off">
+                                    <div class="card-body pb-2">
+                                        <div class="input-group input-group-static mb-4">
+                                            {{ osfurl.csrf_token }}
+                                            {{ osfurl.url.label(class="form-label") }}
+                                            {{ osfurl.url(class="form-control", aria_label="OSF URL") }}
+                                            {% for error in osfurl.url.errors %}
+                                                <div class="text-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="text-center">
+                                            {{ osfurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    {% if data_submitted and videos_submitted %}
     <section>
         <div class="container py-1 mt-3">
             <div class="row justify-space-between text-center py-2">
                 <div class="col-12 mx-auto">
-                    {% if data_submitted and videos_submitted %}
                     <form method="POST" action="{{ url_for('visualizer.visualizer') }}">
                         {{ visualizer_button.hidden_tag() }}
                         <button type="submit" class="btn bg-gradient-dark btn-icon btn-lg" name="{{ visualizer_button.submit.name }}">
@@ -106,99 +159,11 @@
                             </div>
                         </button>
                     </form>
-                    {% else %}
-                    <div class="alert alert-secondary text-white font-weight-bold" role="alert">
-                          Complete both video and file upload to proceed to the visualizer
-                    </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- datafile upload -->
-    <section>
-        <div class="container py-4">
-            <div class="row">
-                <div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
-                    <div class="card d-flex justify-content-center p-4 shadow-lg">
-                        <div class="text-center">
-                            <h3 class="text-gradient text-primary">Data Upload</h3>
-                            <p class="mb-0">
-                                Session sensor data files are found at the Open Science Framework via the link under Project Resources.
-                                You can download a .ZIP file (containing many .NPY and .PLDATA files), and upload its contents.
-                                Alternatively, simply input the .ZIP file link into the form.
-                                Also, please upload the gaze.npz from the processedGaze folder.
-                            </p>
-                        </div>
-
-                        <!-- Add some margin-top to create space between the explanation and tabs -->
-                        <div class="nav-wrapper position-relative end-0 mt-4">
-                            <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center active"
-                                       data-bs-toggle="tab"
-                                       href="#osf_file_upload"
-                                       role="tab"
-                                       aria-controls="osf_file_upload"
-                                       aria-selected="true">
-                                        <i class="material-symbols-rounded text-sm me-2">folder_open</i> File Upload
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center"
-                                       data-bs-toggle="tab"
-                                       href="#osf_url_entry"
-                                       role="tab"
-                                       aria-controls="osf_url_entry"
-                                       aria-selected="false">
-                                        <i class="material-symbols-rounded text-sm me-2">public</i> URL entry
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- Tab Content -->
-                        <div class="tab-content mt-4">
-                            <!-- My Profile Tab -->
-                            <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
-                                <input type="osf_file_upload" />
-                            </div>
-
-                            <!-- Dashboard Tab with Form -->
-                            <div class="tab-pane fade" id="osf_url_entry" role="tabpanel">
-                                <div class="card card-plain">
-                                    <form role="form" id="contact-form" method="post" autocomplete="off">
-                                        <div class="card-body pb-2">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="input-group input-group-static mb-4">
-                                                        {{ osfurl.csrf_token }}
-                                                        {{ osfurl.url.label(class="form-label") }}
-                                                        {{ osfurl.url(class="form-control", aria_label="Databrary URL") }}
-
-                                                        {% for error in osfurl.url.errors %}
-                                                            <div class="text-danger">{{ error }}</div>
-                                                        {% endfor %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12 text-center d-flex justify-content-center gap-3">
-                                                    {{ osfurl.submit(class="btn bg-gradient-dark mt-3 mb-0") }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {% endif %}
 {% endblock %}
 
 {% block js %}

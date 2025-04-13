@@ -12,7 +12,6 @@ from flask import session, redirect
 
 # pip
 import requests
-from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -39,24 +38,6 @@ def check():
 def is_admin():
     user = User.query.filter_by(user_id=session['user']['userinfo']['sub']).first()
     return user.admin
-
-# This function validates that the link submitted is an actual link, and goes to the correct website with downloadable (can't really go further)
-def validate_link(link: str, flag: int) -> bool:
-    # Extract domain (netloc) from the link
-    netloc = urlparse(link).netloc.lower()
-
-    # Match the domain based on the flag using a dictionary
-    expected_domains = {
-        0: "databrary.org",
-        1: "osf.io"
-    }
-    expected_domain = expected_domains.get(flag)
-    if expected_domain is None:
-        # Invalid flag value
-        return False
-
-    # Ensure the domain matches exactly or is a subdomain
-    return netloc == expected_domain or netloc.endswith(f".{expected_domain}")
 
 # Helper function to download video files from a Databrary URL
 # NOTE!! UNTESTED!! DATABRARY IS NOT KIND

@@ -1,4 +1,4 @@
-# some parts are written by brian, but attributions to matt for the overall logic
+# written by brian, with inspiration from matt's original design (the variable-checking)
 # in the midst of a rewrite for more robust handling of files in general
 
 # base
@@ -48,45 +48,25 @@ def file_upload():
     
     # url handling
     if databraryurl.validate_on_submit() and databraryurl.submit.data:  # If Databrary form is valid
-        if validate_link(databraryurl.url.data, 0):  # Validate the link for Databrary (flag 0)
-            # Attempt to fetch and unzip Databrary video files
-            dtb_extraction_path = fetch_and_unzip(download_databrary_videos, databraryurl.url.data, request.upload_path)
-            
-            if "Error" in dtb_extraction_path:
-                flash(f"Error processing Databrary files: {dtb_extraction_path}", 'error')
-            else:
-                flash(f"Videos from Databrary stored in: {dtb_extraction_path}")
-                videos_submitted = True
-    else:
-        return render_template("file_upload/file_upload.html",
-                               is_admin=is_admin(),
-                               data_submitted=data_submitted,
-                               videos_submitted=videos_submitted,
-                               databraryurl=databraryurl,
-                               osfurl=osfurl,
-                               visualizer_button=visualizer_button
-                               )
+        # Attempt to fetch and unzip Databrary video files
+        dtb_extraction_path = fetch_and_unzip(download_databrary_videos, databraryurl.url.data, request.upload_path)
+        
+        if "Error" in dtb_extraction_path:
+            flash(f"Error processing Databrary files: {dtb_extraction_path}", 'error')
+        else:
+            flash(f"Videos from Databrary stored in: {dtb_extraction_path}")
+            videos_submitted = True
     
     if osfurl.validate_on_submit() and osfurl.submit.data:  # If OSF form is valid
-        if validate_link(osfurl.url.data, 1):  # Validate the link for OSF (flag 1)
-            # Attempt to fetch and unzip OSF data files
-            osf_extraction_path = fetch_and_unzip(download_osf_data, osfurl.url.data, request.upload_path)
-            
-            if "Error" in osf_extraction_path:
-                flash(f"Error processing OSF files: {osf_extraction_path}", 'error')
-            else:
-                flash(f"Data from OSF stored in: {osf_extraction_path}")
-                data_submitted = True
+        # Attempt to fetch and unzip OSF data files
+        osf_extraction_path = fetch_and_unzip(download_osf_data, osfurl.url.data, request.upload_path)
+        
+        if "Error" in osf_extraction_path:
+            flash(f"Error processing OSF files: {osf_extraction_path}", 'error')
         else:
-            return render_template("file_upload/file_upload.html",
-                                   is_admin=is_admin(),
-                                   data_submitted=data_submitted,
-                                   videos_submitted=videos_submitted,
-                                   databraryurl=databraryurl,
-                                   osfurl=osfurl,
-                                   visualizer_button=visualizer_button
-                                   )
-    
+            flash(f"Data from OSF stored in: {osf_extraction_path}")
+            data_submitted = True
+
     # On submit of both fields AKA dictionary has all True values
     if visualizer_button.validate_on_submit() and visualizer_button.submit.data and data_submitted and videos_submitted:
         add_session_to_db(request.uuid)
