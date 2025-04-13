@@ -1,11 +1,12 @@
-# rm_empty_dirs, check are written by brian
-# validate link, download funcs are entirely matt's work
+# validate link, download funcs are matt's work with some modification
 # fetch_&_unzip is a rewrite by brian for more "generalized" handling
+# overall brian
 
 # base
 import os
 import zipfile
 from io import BytesIO
+import shutil
 
 # flask
 from flask import session, redirect
@@ -20,13 +21,13 @@ from toolbox import db
 from toolbox.models import User, SessionHistory
 
 # Recursively removes empty (checks) UUID-directories in the given root directory.
-def remove_empty_dirs(root_dir):
-    for dirpath, dirnames, filenames in os.walk(root_dir, topdown=False):
-        for dirname in dirnames:
-            dir_to_check = os.path.join(dirpath, dirname)
-            if not os.listdir(str(dir_to_check)):
-                os.rmdir(dir_to_check)
-                print(f"Deleted empty directory: {dir_to_check}")
+def remove_empty_dirs(base_dir):
+    for root, dirs, files in os.walk(base_dir, topdown=False):
+        for name in dirs:
+            dir_path = os.path.join(root, name)
+            if not os.listdir(dir_path):
+                os.rmdir(dir_path)
+                print(f"Deleted empty directory: {dir_path}")
 
 # If the session is not available AKA the user is not logged in, redirect to home page. else proceed
 def check():
@@ -36,8 +37,7 @@ def check():
 
 # returns the admin bool (T/F) from the table
 def is_admin():
-    user = User.query.filter_by(user_id=session['user']['userinfo']['sub']).first()
-    return user.admin
+    return User.query.filter_by(user_id=session['user']['userinfo']['sub']).first().admin
 
 # Helper function to download video files from a Databrary URL
 # NOTE!! UNTESTED!! DATABRARY IS NOT KIND
@@ -56,7 +56,7 @@ def download_osf_data(link: str) -> bytes:
         raise Exception(f"Failed to download file: {response.status_code}")
     return response.content
 
-# Helper function to unzip content into a specified directory (likely the UUID folder)
+# Helper function to unzip content into a specified directory without creating a new subdir
 def fetch_and_unzip(download_func, url_string: str, unzip_to: str) -> str:
     try:
         if url_string.startswith("https"):
@@ -100,6 +100,12 @@ def fetch_and_unzip(download_func, url_string: str, unzip_to: str) -> str:
 
     except Exception as e:
         return str(e)
+    
+# delete files in a given path
+def clear_directory(path):
+    if os.path.exists(path):
+        shutil.rmtree(path)
+        os.makedirs(path)
 
 # Add new session to database (after successful dual upload)
 def add_session_to_db(uuidfolder: str):

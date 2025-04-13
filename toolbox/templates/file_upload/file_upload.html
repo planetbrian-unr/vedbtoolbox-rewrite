@@ -14,12 +14,12 @@
         <div class="container py-4">
             <div class="row justify-content-center">
                 <!-- notice about file upload -->
-                                    <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
-                            <strong>Notice!</strong> You must upload both video and data files before proceeding to the visualizer
-                            <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
+                    <strong>Notice!</strong> You must upload both video and data files before proceeding to the visualizer
+                    <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <!-- Video Upload Card -->
                 <div class="col-lg-6 d-flex justify-content-center flex-column mb-4 mb-lg-0">
                     <div class="card d-flex justify-content-center p-4 shadow-lg">
@@ -57,7 +57,8 @@
 
                         <div class="tab-content mt-4">
                             <div class="tab-pane fade show active" id="dtb_file_upload" role="tabpanel">
-                                <input type="dtb_file_upload" />
+                                <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
+                                <input id="dtb_file_upload" type="file" name="filepond" />
                             </div>
 
                             <div class="tab-pane fade" id="dtb_url_entry" role="tabpanel">
@@ -118,7 +119,8 @@
 
                         <div class="tab-content mt-4">
                             <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
-                                <input type="osf_file_upload" />
+                                <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
+                                <input id="osf_file_upload" type="file" name="filepond" />
                             </div>
 
                             <div class="tab-pane fade" id="osf_url_entry" role="tabpanel">
@@ -184,12 +186,55 @@
 {% block js %}
     <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
     <script>
-    // Get a reference to the file input element
-    const osf_file_upload_input_element = document.querySelector('input[type="osf_file_upload"]');
-    const dtb_file_upload_input_element = document.querySelector('input[type="dtb_file_upload"]');
+        // CSRF Token
+        const csrfToken = document.querySelector('#csrf_token').value;
 
-    // Create a FilePond instance
-    const osf_pond = FilePond.create(osf_file_upload_input_element);
-    const dtb_pond = FilePond.create(dtb_file_upload_input_element);
-</script>
+        // Get a reference to the file input elements
+        const osf_file_upload_input_element = document.querySelector('input[id="osf_file_upload"]');
+        const dtb_file_upload_input_element = document.querySelector('input[id="dtb_file_upload"]');
+
+        // Set the field name used in FormData for both inputs
+        FilePond.setOptions({
+            name: 'filepond'
+        });
+
+        // Create FilePond instance for OSF input
+        const osf_pond = FilePond.create(osf_file_upload_input_element, {
+            allowMultiple: true, // Allow multiple file uploads
+            chunkUploads: true, // Enable chunked file uploads
+            server: {
+                url: './upload',
+                process: {
+                    url: '',
+                    method: 'POST',
+                    withCredentials: false,
+                    headers: {
+                        'X-CSRFToken': csrfToken // Attach the CSRF token to the request header
+                    },
+                    onload: response => response,
+                    onerror: response => response,
+                }
+            }
+        });
+
+        // Create FilePond instance for DTB input
+        const dtb_pond = FilePond.create(dtb_file_upload_input_element, {
+            allowMultiple: true, // Allow multiple file uploads
+            chunkUploads: true, // Enable chunked file uploads
+            server: {
+                url: './upload',
+                process: {
+                    url: '',
+                    method: 'POST',
+                    withCredentials: false,
+                    headers: {
+                        'X-CSRFToken': csrfToken // Attach the CSRF token to the request header
+                    },
+                    onload: response => response,
+                    onerror: response => response,
+                }
+            }
+        });
+    </script>
+
 {% endblock %}

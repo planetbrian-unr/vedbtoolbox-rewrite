@@ -24,6 +24,7 @@ def register_extensions(app):
     db.init_app(app)
     csrf.init_app(app)
 
+# registers blueprints in a generalized manner. idea by chatgpt
 def register_blueprints(app, bp_list):
     for module_name in bp_list:
         module = import_module('toolbox.{}.routes'.format(module_name))
@@ -33,6 +34,7 @@ def create_app(test_config=None):
     # initialize core application
     app = Flask(__name__, instance_relative_config=True)
 
+    # configuration
     if test_config is None:
         app.config.from_object("toolbox.config.Config")
     elif test_config:

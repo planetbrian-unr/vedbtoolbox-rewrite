@@ -3,10 +3,9 @@
 
 # base
 import uuid
-import shutil
 
 # flask
-from flask import render_template, flash, request, redirect
+from flask import render_template, flash, request, redirect, jsonify
 
 # local
 from toolbox.file_upload import blueprint
@@ -79,28 +78,40 @@ def file_upload():
     # On submit, it will delete whatever has been uploaded to request.upload_path folder
     if reset_button.validate_on_submit() and reset_button.reset.data:
         print("Reset form submitted!")
-        for filename in os.listdir(request.upload_path):
-            print("Deleting:", filename)
-            file_path = os.path.join(request.upload_path, filename)
-            try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.remove(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                print(f"Failed to delete {file_path}. Reason: {e}")
-        
+        clear_directory(request.upload_path)
         data_submitted = False
         videos_submitted = False
         
-    
     # Render the file upload page
     return render_template("file_upload/file_upload.html",
         is_admin=is_admin(),
+        
+        # flags and other variables
         data_submitted=data_submitted,
         videos_submitted=videos_submitted,
+        
+        # forms and buttons
         databraryurl=databraryurl,
         osfurl=osfurl,
         visualizer_button=visualizer_button,
         reset_button=reset_button
     )
+
+@blueprint.route('/upload', methods=['POST'])
+def upload_file():
+    print("Reached the upload route!")
+    
+    if 'filepond' not in request.files:
+        print("error here 1")
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['filepond']
+    if file.filename == '':
+        print("error here 2")
+        return jsonify({'error': 'No selected file'}), 400
+
+    # Save the file to the user's uuid upload folder
+    file.save(os.path.join(request.upload_path, file.filename))
+
+    print("made it")
+    return jsonify({'id': file.filename})

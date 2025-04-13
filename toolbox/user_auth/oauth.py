@@ -11,7 +11,7 @@ from authlib.integrations.flask_client import OAuth
 # flask
 from flask import current_app
 
-# read .env file for auth0 variables
+# read .env file for auth0 variables.
 ENV_FILE = find_dotenv()
 if ENV_FILE:
     load_dotenv(ENV_FILE)
