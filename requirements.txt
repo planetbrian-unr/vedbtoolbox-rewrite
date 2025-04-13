@@ -7,8 +7,6 @@ Flask_Minify # compress webpage stuff for better serving
 # Flask file-upload system with nice looks
 WTForms
 Flask_WTF
-Bootstrap-Flask
-validators
 
 # for auth0 and its variables
 python-dotenv
