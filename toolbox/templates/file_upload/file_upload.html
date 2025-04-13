@@ -1,38 +1,112 @@
 {% extends 'file_upload/base.jinja' %}
-{% from 'bootstrap5/form.html' import render_form %}
 
 {% block header %}
     <h1>{% block title %}File Upload{% endblock %}</h1>
 {% endblock %}
 
-{%  block css %}
-    {{ dropzone.load_css() }}
+{% block css %}
 {% endblock %}
 
 {% block content %}
-<section>
-    <div class="container py-4">
-        <div class="row">
-            <div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
-                <div class="card d-flex justify-content-center p-4 shadow-lg">
-                    <div class="text-center">
-                        <h3 class="text-gradient text-primary">File Upload</h3>
-                        <p class="mb-0">
-                            form.
-                        </p>
-                    </div>
-                    <div class="card card-plain">
-                        {{ render_form(osfurl) }}
+    <!-- video upload -->
+    <section>
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
+                    <div class="card d-flex justify-content-center p-4 shadow-lg">
+                        <div class="text-center">
+                            <h3 class="text-gradient text-primary">Video Upload</h3>
+                            <p class="mb-0">
+                                Session videos are available on Databrary via the link under Project Resources.
+                                You can download a .ZIP file (containing 3 .MP4s and 1 .CSV), and upload its contents.
+                                Alternatively, simply input the .ZIP file link into the form.
+                            </p>
+                        </div>
+                        <div class="card card-plain">
+                            <form role="form" id="contact-form" method="post" autocomplete="off">
+                                <div class="card-body pb-2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="input-group input-group-static mb-4">
+                                                <label>Databrary URL</label>
+                                                <input class="form-control" placeholder="e.g., John Mitch" aria-label="Databrary URL" type="url" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-center d-flex justify-content-center gap-3">
+                                            <!-- Download from URL Button -->
+                                            <button type="submit" class="btn bg-gradient-dark mt-3 mb-0">Download from URL</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
+    {% if data_submitted and videos_submitted %}
+    <section>
+        <div class="container py-1 mt-3">
+            <div class="row justify-space-between text-center py-2">
+                <div class="col-12 mx-auto">
+                    <form action="/visualizer" method="POST">
+                        <button class="btn bg-gradient-dark btn-icon btn-lg" type="submit">
+                            <div class="d-flex align-items-center">
+                                Enter Visualizer
+                                <i class="material-symbols-rounded ms-2" aria-hidden="true">developer_board</i>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- datafile upload -->
+    <section>
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
+                    <div class="card d-flex justify-content-center p-4 shadow-lg">
+                        <div class="text-center">
+                            <h3 class="text-gradient text-primary">Data Upload</h3>
+                            <p class="mb-0">
+                                Session sensor data files are found at the Open Science Framework via the link under Project Resources.
+                                You can download a .ZIP file (containing many .NPY and .PLDATA files), and upload its contents.
+                                Alternatively, simply input the .ZIP file link into the form.
+                                Also, please upload the gaze.npz from the processedGaze folder.
+                            </p>
+                        </div>
+                        <div class="card card-plain">
+                            <form role="form" id="contact-form" method="post" autocomplete="off">
+                                <div class="card-body pb-2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="input-group input-group-static mb-4">
+                                                <label>OSF URL</label>
+                                                <input class="form-control" placeholder="e.g., https://osf.io/download/puvmg/" aria-label="OSF URL" type="url" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <button type="submit" class="btn bg-gradient-dark mt-3 mb-0">Download from URL</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block js %}
-    {{ dropzone.config(id='data') }}
-    {{ dropzone.load_js() }}
 {% endblock %}

@@ -16,18 +16,15 @@ def add_user_to_local_db(token):
     try:
         # Parse returned JSON in token for specific attributes
         user_info = token.get("userinfo", {})
-        user_id = user_info.get("sub")
-        username = user_info.get("nickname")
-        email = user_info.get("email")
 
         # Add/update the user in the database
-        user_in_db = User.query.filter_by(user_id=user_id).first()
+        user_in_db = User.query.filter_by(user_id=user_info.get("sub")).first()
         if not user_in_db:
             # Add new user if not already in the database
             new_user = User(
-                user_id = user_id,
-                username = username,
-                email = email,
+                user_id = user_info.get("sub"),
+                username = user_info.get("nickname"),
+                email = user_info.get("email"),
                 admin = is_first_user()
             )
             db.session.add(new_user)
@@ -35,8 +32,8 @@ def add_user_to_local_db(token):
             return {"status": "success", "message": "User successfully added to DB."}
         else:
             # Update existing user if necessary
-            user_in_db.username = username
-            user_in_db.email = email
+            user_in_db.username = user_info.get("nickname")
+            user_in_db.email = user_info.get("email")
             db.session.commit()
             return {"status": "success", "message": "User successfully updated with new details."}
 

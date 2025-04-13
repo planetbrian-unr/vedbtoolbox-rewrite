@@ -8,11 +8,18 @@ import zipfile
 from io import BytesIO
 
 # flask
-from flask import session, redirect, url_for
+from flask import session, redirect, request
 
 # pip
 import requests
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
+from sqlalchemy.exc import SQLAlchemyError
+from validators import url
+
+# local
+from toolbox import db
+from toolbox.models import User, SessionHistory
 
 # Recursively removes empty (checks) UUID-directories in the given root directory.
 def remove_empty_dirs(root_dir):
@@ -29,23 +36,40 @@ def check():
         return redirect("/")
     return None
 
+# returns the admin bool (T/F) from the table
+def is_admin():
+    user = User.query.filter_by(user_id=session['user']['userinfo']['sub']).first()
+    return user.admin
+
 # This function validates that the link submitted is an actual link, and goes to the correct website with downloadable (can't really go further)
 def validate_link(link: str, flag: int) -> bool:
-    if "." not in link:
+    if not url(link):
         return False
-    if "osf.io" not in link and flag == 1:
+
+    # Extract domain (netloc) from the link
+    netloc = urlparse(link).netloc.lower()
+
+    # Match the domain based on the flag using a dictionary
+    expected_domains = {
+        0: "nyu.databrary.org",
+        1: "osf.io"
+    }
+    expected_domain = expected_domains.get(flag)
+    if expected_domain is None:
+        # Invalid flag value
         return False
-    if "nyu.databrary.org" not in link and flag == 0:
-        return False
-    return True
+
+    # Ensure the domain matches exactly or is a subdomain
+    return netloc == expected_domain or netloc.endswith(f".{expected_domain}")
 
 # Helper function to download video files from a Databrary URL
 def download_databrary_videos(link: str) -> bytes:
-    return urlopen(Request(link, headers= {
+    headers = {
         'Accept': 'text/html, */*; q=0.01, gzip, deflate, br, zstd, en-US, en; q=0.9',
         'Referer': 'https://nyu.databrary.org/volume/1612/slot/65955/zip/false',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0'
-    })).read()
+    }
+    return urlopen(Request(link, headers=headers)).read()
 
 # Helper function to download data files from OSF
 def download_osf_data(link: str) -> bytes:
@@ -80,3 +104,22 @@ def fetch_and_unzip(download_func, url_string: str, unzip_to: str) -> str:
 
     except Exception as e:
         return str(e)  # Return error message
+
+# Add new session to database (after successful dual upload)
+def add_session_to_db(uuidfolder: str):
+    try:
+        new_session = SessionHistory (
+            session_id = uuidfolder,  # created folder. will have files in it and thus will not be deleted during create_user_directory()
+            user_id = session['user']['userinfo']['sub']    # gets user_id (auth0|...) for database integrity
+        )
+        db.session.add(new_session)
+        db.session.commit()
+        return {"status": "success", "message": "Session successfully added to DB."}
+    except SQLAlchemyError as e:
+        # Handle database-related errors
+        db.session.rollback()
+        return {"status": "error", "message": "An error occurred while interacting with the database."}
+
+    except Exception as e:
+        # Handle other errors
+        return {"status": "error", "message": "An unexpected error occurred."}
