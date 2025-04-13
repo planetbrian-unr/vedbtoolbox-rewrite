@@ -184,8 +184,14 @@
 {% endblock %}
 
 {% block js %}
+    <!-- filepond and its plugins -->
     <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+
     <script>
+        // plugins
+        FilePond.registerPlugin(FilePondPluginFileValidateType);
+
         // CSRF Token
         const csrfToken = document.querySelector('#csrf_token').value;
 
@@ -219,8 +225,10 @@
 
         // Create FilePond instance for DTB input
         const dtb_pond = FilePond.create(dtb_file_upload_input_element, {
-            allowMultiple: true, // Allow multiple file uploads
-            chunkUploads: true, // Enable chunked file uploads
+            allowMultiple: true,
+            allowFileTypeValidation: true,
+            acceptedFileTypes: ['video/mp4', 'text/csv'],
+            chunkUploads: true,
             server: {
                 url: './upload',
                 process: {
@@ -228,10 +236,22 @@
                     method: 'POST',
                     withCredentials: false,
                     headers: {
-                        'X-CSRFToken': csrfToken // Attach the CSRF token to the request header
+                        'X-CSRFToken': csrfToken
                     },
                     onload: response => response,
                     onerror: response => response,
+                }
+            },
+            onaddfile: (err, file) => {
+                if (err) return;
+
+                const files = dtb_pond.getFiles();
+                const mp4s = files.filter(f => f.file.type === 'video/mp4');
+                const csvs = files.filter(f => f.file.type === 'text/csv');
+
+                if (mp4s.length > 3 || csvs.length > 1 || files.length > 4) {
+                    dtb_pond.removeFile(file.id);
+                    alert('Only 3 MP4 files and 1 CSV file are allowed.');
                 }
             }
         });

@@ -70,14 +70,12 @@ def file_upload():
 
     # On submit of both fields AKA dictionary has all True values
     if visualizer_button.validate_on_submit() and visualizer_button.submit.data and data_submitted and videos_submitted:
-        print("files submitted!")
         add_session_to_db(request.uuid)
         session.pop('upload_uuid', None)
         return redirect("/visualizer")
     
     # On submit, it will delete whatever has been uploaded to request.upload_path folder
     if reset_button.validate_on_submit() and reset_button.reset.data:
-        print("Reset form submitted!")
         clear_directory(request.upload_path)
         data_submitted = False
         videos_submitted = False
@@ -99,19 +97,15 @@ def file_upload():
 
 @blueprint.route('/upload', methods=['POST'])
 def upload_file():
-    print("Reached the upload route!")
     
     if 'filepond' not in request.files:
-        print("error here 1")
         return jsonify({'error': 'No file part'}), 400
 
     file = request.files['filepond']
     if file.filename == '':
-        print("error here 2")
         return jsonify({'error': 'No selected file'}), 400
 
     # Save the file to the user's uuid upload folder
     file.save(os.path.join(request.upload_path, file.filename))
 
-    print("made it")
     return jsonify({'id': file.filename})
