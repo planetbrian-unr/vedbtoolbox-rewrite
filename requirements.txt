@@ -1,17 +1,17 @@
 # Flask bits
 Flask
-SQLAlchemy
-Flask-SQLAlchemy
 Flask_Minify # compress webpage stuff for better serving
 
-# Flask file-upload system with nice looks
+# Flask login and file-upload system
+Flask-Login
+SQLAlchemy
+Flask-SQLAlchemy
 WTForms
 Flask_WTF
-
-# for auth0 and its variables
-python-dotenv
-Authlib
-requests
+Flask-Dropzone
 
 # production-ready WSGI server
 gunicorn
+
+Werkzeug
+requests

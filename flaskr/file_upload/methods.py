@@ -10,15 +10,18 @@ import shutil
 
 # flask
 from flask import session, redirect
+from flask_login import current_user
 
 # pip
 import requests
 from urllib.request import Request, urlopen
+
+from flask_login import current_user
 from sqlalchemy.exc import SQLAlchemyError
 
 # local
-from toolbox import db
-from toolbox.models import User, SessionHistory
+from flaskr import db
+from flaskr.models import User, SessionHistory
 
 # Recursively removes empty (checks) UUID-directories in the given root directory.
 def remove_empty_dirs(base_dir):
@@ -29,15 +32,9 @@ def remove_empty_dirs(base_dir):
                 os.rmdir(dir_path)
                 print(f"Deleted empty directory: {dir_path}")
 
-# If the session is not available AKA the user is not logged in, redirect to home page. else proceed
-def check():
-    if not session:
-        return redirect("/")
-    return None
-
 # returns the admin bool (T/F) from the table
 def is_admin():
-    return User.query.filter_by(user_id=session['user']['userinfo']['sub']).first().admin
+    return User.query.filter_by(username=current_user.username).first().admin
 
 # Helper function to download video files from a Databrary URL
 # NOTE!! UNTESTED!! DATABRARY IS NOT KIND

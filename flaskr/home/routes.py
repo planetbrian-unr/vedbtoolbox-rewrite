@@ -2,21 +2,22 @@
 
 # flask
 from flask import render_template
+from flask_login import current_user
 
 # local
-from toolbox.home import blueprint
+from flaskr.home import blueprint
 
 @blueprint.route("/")
 def home():
-    return render_template("home/home.html")
+    return render_template("home/home.html", logged_in=current_user.is_authenticated)
 
 @blueprint.route("/team")
 def team():
-    return render_template("home/team.html")
+    return render_template("home/team.html", logged_in=current_user.is_authenticated)
 
 @blueprint.route("/faculty")
 def faculty():
-    return render_template("home/faculty.html")
+    return render_template("home/faculty.html", logged_in=current_user.is_authenticated)
 
 @blueprint.app_errorhandler(404)
 def page_not_found(e):

@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from os import system as run_shell_command
 
 # local - application setup
-from toolbox import create_app
+from flaskr import create_app
 
 def parse_args():
     parser = ArgumentParser(description="VEDB Toolbox application setup.")
@@ -24,7 +24,7 @@ def parse_args():
 def run_app(config_type):
     if config_type == "wsgi-zach":
         # WSGI on CSE server port 9090 as a daemon (6 allotted CPU cores = 12 workers (2 per core))
-        run_shell_command("gunicorn -w 12 -b 0.0.0.0:9090 'toolbox:create_app(test_config=None)' --daemon")
+        run_shell_command("gunicorn -w 12 -b 0.0.0.0:9090 'flaskr:create_app(test_config=None)' --daemon")
     else:
         # Default to development configuration. "mem" uses a static secret key and in-memory sqlite database
         if config_type == "mem":

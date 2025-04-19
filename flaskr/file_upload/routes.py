@@ -6,11 +6,12 @@ import uuid
 
 # flask
 from flask import render_template, flash, request, redirect, jsonify
+from flask_login import current_user
 
 # local
-from toolbox.file_upload import blueprint
-from toolbox.file_upload.forms import *
-from toolbox.file_upload.methods import *
+from flaskr.file_upload import blueprint
+from flaskr.file_upload.forms import *
+from flaskr.file_upload.methods import *
 
 # create uploads directory if it doesn't already exist
 UPLOAD_FOLDER = 'uploads'
@@ -34,8 +35,8 @@ def create_user_directory():
 @blueprint.route("/file_upload", methods=["GET", "POST"])
 def file_upload():
     # check if user is logged in, redirecting back to the homepage if not
-    if check_redirect := check():
-        return check_redirect
+    if not current_user.is_authenticated:
+        return redirect("/")
 
     # forms
     databraryurl = DatabraryURLForm()

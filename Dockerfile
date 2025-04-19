@@ -8,7 +8,7 @@ FROM python:bookworm
 WORKDIR /app
 COPY requirements.txt .
 COPY LICENSE .
-COPY toolbox ./toolbox
+COPY flaskr ./toolbox
 
 # install necessary stuff not in image & the application's pip requirements
 RUN <<EOF

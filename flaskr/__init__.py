@@ -12,6 +12,8 @@ from importlib import import_module
 
 # flask and its plugins
 from flask import Flask
+from flask_login import LoginManager
+from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_minify import Minify
 from flask_wtf.csrf import CSRFProtect
@@ -19,15 +21,19 @@ from flask_wtf.csrf import CSRFProtect
 # globally accessible objects
 db = SQLAlchemy()
 csrf = CSRFProtect()
+bootstrap = Bootstrap5()
+login_manager = LoginManager()
 
 def register_extensions(app):
     db.init_app(app)
     csrf.init_app(app)
+    bootstrap.init_app(app)
+    login_manager.init_app(app)
 
 # registers blueprints in a generalized manner. idea by chatgpt
 def register_blueprints(app, bp_list):
     for module_name in bp_list:
-        module = import_module('toolbox.{}.routes'.format(module_name))
+        module = import_module('flaskr.{}.routes'.format(module_name))
         app.register_blueprint(module.blueprint)
 
 def create_app(test_config=None):
@@ -36,9 +42,9 @@ def create_app(test_config=None):
 
     # configuration
     if test_config is None:
-        app.config.from_object("toolbox.config.Config")
+        app.config.from_object("flaskr.config.Config")
     elif test_config:
-        app.config.from_object("toolbox.config.TestingConfig")
+        app.config.from_object("flaskr.config.TestingConfig")
 
     # minifies files within the project for faster serving
     Minify(app, html=True, js=True, cssless=True)

@@ -2,7 +2,7 @@
 from flask import render_template
 
 # local
-from toolbox.visualizer import blueprint
+from flaskr.visualizer import blueprint
 
 @blueprint.route("/visualizer")
 def visualizer():
