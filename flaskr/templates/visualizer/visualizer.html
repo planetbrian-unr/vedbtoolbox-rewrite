@@ -1,0 +1,289 @@
+{% extends 'visualizer/base.jinja' %}
+
+{% block header %}
+  <h1>{% block title %}Visualizer{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="row pt-5">
+        <div class="col-lg-1 col-md-1 pt-5 pt-lg-0 ms-lg-5 text-center ms-lg-auto">
+            <a href="javascript:;" class="avatar avatar-lg border-0 p-1" data-bs-toggle="tooltip" data-bs-placement="right" title="My Profile">
+                <img class="border-radius-lg" alt="Image placeholder" src="../assets/img/team-1.jpg" />
+            </a>
+            <button class="btn btn-white border-radius-lg p-2 mt-n4 mt-md-2" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Home">
+                <i class="material-symbols-rounded p-2">home</i>
+            </button>
+            <button class="btn btn-white border-radius-lg p-2 mt-n4 mt-md-0" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Search">
+                <i class="material-symbols-rounded p-2">search</i>
+            </button>
+            <button class="btn btn-white border-radius-lg p-2 mt-n4 mt-md-0" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Minimize">
+                <i class="material-symbols-rounded p-2">more_horiz</i>
+            </button>
+        </div>
+        <div class="col-lg-8 col-md-11 ps-md-5 mb-5 mb-md-0 me-lg-auto">
+            <div class="d-flex">
+                <div class="me-auto">
+                    <h1 class="display-1 font-weight-bold mt-n3 mb-0 text-white">28°C</h1>
+                    <h6 class="text-uppercase mb-0 ms-1 text-white">Cloudy</h6>
+                </div>
+                <div class="ms-auto">
+                    <img class="w-50 float-end mt-n6 mt-lg-n4" src="../assets/img/small-logos/icon-sun-cloud.png" alt="image sun" />
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card move-on-hover overflow-hidden">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <h6 class="mb-0 me-3">08:00</h6>
+                                <h6 class="mb-0">
+                                    Synk up with Mark
+                                    <small class="text-secondary font-weight-normal">Hangouts</small>
+                                </h6>
+                            </div>
+                            <hr class="horizontal dark" />
+                            <div class="d-flex">
+                                <h6 class="mb-0 me-3">09:30</h6>
+                                <h6 class="mb-0">
+                                    Gym <br />
+                                    <small class="text-secondary font-weight-normal">World Class</small>
+                                </h6>
+                            </div>
+                            <hr class="horizontal dark" />
+                            <div class="d-flex">
+                                <h6 class="mb-0 me-3">11:00</h6>
+                                <h6 class="mb-0">
+                                    Design Review<br />
+                                    <small class="text-secondary font-weight-normal">Zoom</small>
+                                </h6>
+                            </div>
+                        </div>
+                        <a href="javascript:;" class="bg-gray-100 w-100 text-center py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Show More">
+                            <i class="material-symbols-rounded text-primary">expand_more</i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-4 mt-sm-0">
+                    <div class="card bg-gradient-dark move-on-hover">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <h5 class="mb-0 text-white">To Do</h5>
+                                <div class="ms-auto">
+                                    <h1 class="text-white text-end mb-0 mt-n2">7</h1>
+                                    <p class="text-sm mb-0 text-white">items</p>
+                                </div>
+                            </div>
+                            <p class="text-white mb-0">Shopping</p>
+                            <p class="mb-0 text-white">Meeting</p>
+                        </div>
+                        <a href="javascript:;" class="w-100 text-center py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Show More">
+                            <i class="material-symbols-rounded text-white">expand_more</i>
+                        </a>
+                    </div>
+                    <div class="card move-on-hover mt-4">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <p class="mb-0">Emails (21)</p>
+                                <a href="javascript:;" class="ms-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Check your emails">
+                                    Check
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 mt-4 mt-lg-0">
+                    <div class="card card-background card-background-mask-dark move-on-hover align-items-start">
+                        <div class="cursor-pointer">
+                            <div
+                                class="full-background"
+                                style="background-image: url('https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80');"
+                            ></div>
+                            <div class="card-body">
+                                <h5 class="text-white mb-0">Night Jazz</h5>
+                                <p class="text-white text-sm">Gary Coleman</p>
+                                <div class="d-flex mt-5">
+                                    <button class="btn btn-outline-white rounded-circle p-2 mb-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Prev">
+                                        <i class="material-symbols-rounded p-2 mt-0">skip_previous</i>
+                                    </button>
+                                    <button class="btn btn-outline-white rounded-circle p-2 mx-2 mb-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Pause">
+                                        <i class="material-symbols-rounded p-2 mt-0">play_arrow</i>
+                                    </button>
+                                    <button class="btn btn-outline-white rounded-circle p-2 mb-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Next">
+                                        <i class="material-symbols-rounded p-2 mt-0">skip_next</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card move-on-hover mt-4">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <p class="my-auto">Messages</p>
+                                <div class="ms-auto">
+                                    <div class="avatar-group">
+                                        <a href="javascript:;" class="avatar avatar-sm border-0 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="2 New Messages">
+                                            <img alt="Image placeholder" src="../assets/img/team-1.jpg" />
+                                        </a>
+                                        <a href="javascript:;" class="avatar avatar-sm border-0 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="1 New Message">
+                                            <img alt="Image placeholder" src="../assets/img/team-2.jpg" />
+                                        </a>
+                                        <a href="javascript:;" class="avatar avatar-sm border-0 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="13 New Messages">
+                                            <img alt="Image placeholder" src="../assets/img/team-3.jpg" />
+                                        </a>
+                                        <a href="javascript:;" class="avatar avatar-sm border-0 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="7 New Messages">
+                                            <img alt="Image placeholder" src="../assets/img/team-4.jpg" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{%  block js %}
+    <!-- plotly, very important -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- local, visualizer -->
+    <script src="{{ url_for('static',filename='javascript/visualizer.js') }}"></script>
+    <script type="text/javascript">
+        // var linear_graph = {{linear_vel_JSON | safe}};
+        // var angular_graph = {{angular_vel_JSON | safe}};
+        // var gaze_graph = {{gaze_JSON | safe}}
+
+        // Assigning variables passed in through render_template on the backend
+        var velocityTimestamps = {{velocity_timestamps | safe}};
+
+        var linear0 = {{linear_0 | safe}};
+        var linear1 = {{linear_1 | safe}};
+        var linear2 = {{linear_2 | safe}};
+
+        var angular0 = {{angular_0 | safe}};
+        var angular1 = {{angular_1 | safe}};
+        var angular2 = {{angular_2 | safe}};
+
+        var leftGazeTime = {{left_gaze_timestamps | safe}};
+        var leftNormX = {{left_norm_pos_x | safe}};
+        var leftNormY = {{left_norm_pos_y | safe}};
+
+        var rightGazeTime = {{right_gaze_timestamps | safe}};
+        var rightNormX = {{right_norm_pos_x | safe}};
+        var rightNormY = {{right_norm_pos_y | safe}};
+
+        // Plotly.plot("linear_velocity", linear_graph, {});
+        // Plotly.plot("angular_velocity", angular_graph, {});
+        // Plotly.plot("gaze", gaze_graph, {});
+
+        // initial values
+        initTimelist = [velocityTimestamps[0], velocityTimestamps[1]];
+        initLinVel0 = [linear0[0], linear0[1]];
+        initLinVel1 = [linear1[0], linear1[1]];
+        initLinVel2 = [linear2[0], linear2[1]];
+
+        const trace1 = {
+            x: velocityTimestamps,
+            y: linear0,
+            mode: 'lines',
+            name: 'Linear Velocity 0'
+        }
+        const trace2 = {
+            x: velocityTimestamps,
+            y: linear1,
+            mode: 'lines',
+            name: 'Linear Velocity 1'
+        }
+        const trace3 = {
+            x: velocityTimestamps,
+            y: linear2,
+            mode: 'lines',
+            name: 'Linear Velocity 2'
+        }
+
+        const linearData = [trace1, trace2, trace3];
+
+        const linearLayout = {
+            title: 'Linear Velocity',
+            xaxis: {title: 'Time', range: [-2, 2]},
+            yaxis: {title: 'Linear Velocity'},
+            height: 257,
+            width: 500
+        }
+
+        Plotly.plot('linear_velocity', linearData, linearLayout);
+
+        const trace4 = {
+            x: velocityTimestamps,
+            y: angular0,
+            mode: 'lines',
+            name: 'Angular Velocity 0'
+        }
+        const trace5 = {
+            x: velocityTimestamps,
+            y: angular1,
+            mode: 'lines',
+            name: 'Angular Velocity 1'
+        }
+        const trace6 = {
+            x: velocityTimestamps,
+            y: angular2,
+            mode: 'lines',
+            name: 'Angular Velocity 2'
+        }
+
+        const angularData = [trace4, trace5, trace6];
+
+        const angularLayout = {
+            title: 'Angular Velocity',
+            xaxis: {title: 'Time', range: [-2, 2]},
+            yaxis: {title: 'Angular Velocity'},
+            height: 257,
+            width: 500
+        }
+
+        Plotly.plot('angular_velocity', angularData, angularLayout);
+
+        const trace7 = {
+            x: leftGazeTime,
+            y: leftNormX,
+            mode: 'lines',
+            name: 'Left Norm Pos X'
+        }
+
+        const trace8 = {
+            x: leftGazeTime,
+            y: leftNormY,
+            mode: 'lines',
+            name: 'Left Norm Pos Y'
+        }
+
+        const trace9 = {
+            x: rightGazeTime,
+            y: rightNormX,
+            mode: 'lines',
+            name: 'Right Norm Pos X'
+        }
+
+        const trace10 = {
+            x: rightGazeTime,
+            y: rightNormY,
+            mode: 'lines',
+            name: 'Right Norm Pos Y'
+        }
+
+        const gazeData = [trace7, trace8, trace9, trace10];
+
+        const gazeLayout = {
+            title: 'Normalized Gaze Positions',
+            xaxis: {title: 'Time', range: [-2, 2]},
+            yaxis: {title: 'Normalized Position'},
+            height: 257,
+            width: 500
+        }
+
+        Plotly.plot('gaze', gazeData, gazeLayout);
+    </script>
+{% endblock %}
