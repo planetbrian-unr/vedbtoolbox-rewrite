@@ -1,17 +1,25 @@
 # Flask bits
 Flask
 Flask_Minify # compress webpage stuff for better serving
-
-# Flask login and file-upload system
 Flask-Login
-SQLAlchemy
 Flask-SQLAlchemy
-WTForms
 Flask_WTF
-Flask-Dropzone
+Bootstrap-Flask
 
 # production-ready WSGI server
 gunicorn
 
-Werkzeug
+# fixations and visualization
+numpy
+opencv-python
+scipy
+msgpack
 requests
+pytest
+pytest-mock
+bitarray
+numpy-quaternion
+plotly
+pandas
+pathlib
+matplotlib
