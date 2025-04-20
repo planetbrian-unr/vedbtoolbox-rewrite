@@ -22,6 +22,7 @@
 
         <!-- CSS Files -->
         <link id="pagestyle" href="{{ url_for('static', filename='home/css/material-kit.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='visualizer/css/visualizer.css') }}" />
 
         <!-- Anti-flicker snippet (recommended)  -->
         <style>
@@ -304,11 +305,13 @@
         </div>
         <!-- End Navbar -->
 
+
         <!-- body -->
         <header class="bg-gradient-dark">
             <div class="page-header min-vh-100" style="background-image: url('{{ url_for('static', filename='home/img/journey_into_dataviz_feature.png') }}')" loading="lazy">
                 <span class="mask bg-gradient-dark opacity-6"></span>
                 <div class="container">
+                    <div style="height: 50px;"></div>
                     {% block content %}{% endblock %}
                 </div>
             </div>
