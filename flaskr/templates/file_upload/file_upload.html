@@ -20,6 +20,12 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                    <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
+                    <strong>Notice!</strong> If uploading via drag and drop. please upload required files and reload the page.
+                    <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <!-- Video Upload Card -->
                 <div class="col-lg-6 d-flex justify-content-center flex-column mb-4 mb-lg-0">
                     <div class="card d-flex justify-content-center p-4 shadow-lg">
@@ -58,7 +64,8 @@
                         <div class="tab-content mt-4">
                             <div class="tab-pane fade show active" id="dtb_file_upload" role="tabpanel">
                                 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
-                                <input id="dtb_file_upload" type="file" name="filepond" />
+                                <input id="dtb_file_upload" type="file" name="filepond" multiple accept=".mp4,.csv" />
+
                             </div>
 
                             <div class="tab-pane fade" id="dtb_url_entry" role="tabpanel">
@@ -120,8 +127,7 @@
                         <div class="tab-content mt-4">
                             <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
                                 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
-                                <input type="file" id="osf_file_upload" name="filepond" multiple
-       accept=".pldata,.npy,.npz,.yaml,.intrinsics,.extrinsics">
+                                <input type="file" id="osf_file_upload" name="filepond" multiple accept=".pldata,.npy,.npz,.yaml,.intrinsics,.extrinsics">
                             </div>
 
                             <div class="tab-pane fade" id="osf_url_entry" role="tabpanel">
@@ -154,9 +160,12 @@
                 <div class="col-auto">
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
                         {% if data_submitted and videos_submitted %}
-                        <form method="POST" action="{{ url_for('visualizer.visualizer') }}">
+                        <form method="POST" action="{{ url_for('file_upload.file_upload') }}">
                             {{ visualizer_button.hidden_tag() }}
-                            <button type="submit" class="btn bg-gradient-dark btn-icon btn-lg" name="{{ visualizer_button.submit.name }}">
+                            <button type="submit"
+                                    class="btn bg-gradient-dark btn-icon btn-lg"
+                                    name="{{ visualizer_button.submit.name }}"
+                                    value="1">
                                 <div class="d-flex align-items-center">
                                     {{ visualizer_button.submit.label.text }}
                                     <i class="material-symbols-rounded ms-2" aria-hidden="true">developer_board</i>
@@ -190,29 +199,28 @@
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 
     <script>
-        // plugins
+        // Register FilePond plugin
         FilePond.registerPlugin(FilePondPluginFileValidateType);
 
-        // CSRF Token
+        // CSRF Token for security
         const csrfToken = document.querySelector('#csrf_token').value;
 
-        // Get a reference to the file input elements
+        // Get file input elements
         const osf_file_upload_input_element = document.querySelector('input[id="osf_file_upload"]');
         const dtb_file_upload_input_element = document.querySelector('input[id="dtb_file_upload"]');
 
-        // Set the field name used in FormData for both inputs
+        // Set the field name for both FilePond instances
         FilePond.setOptions({
             name: 'filepond'
         });
 
-        // Create FilePond instance for OSF input
+        // Create FilePond instance for OSF file input
         const osf_pond = FilePond.create(osf_file_upload_input_element, {
             allowMultiple: true,
-            allowFileTypeValidation: false, // Disable built-in MIME type validation
+            allowFileTypeValidation: false,
             server: {
                 url: './upload',
                 process: {
-                    url: '',
                     method: 'POST',
                     withCredentials: false,
                     headers: {
@@ -236,14 +244,13 @@
             }
         });
 
-        // Create FilePond instance for DTB input
+        // Create FilePond instance for Databrary file input
         const dtb_pond = FilePond.create(dtb_file_upload_input_element, {
             allowMultiple: true,
-            allowFileTypeValidation: false,  // Disable the built-in MIME type validation
+            allowFileTypeValidation: false,
             server: {
                 url: './upload',
                 process: {
-                    url: '',
                     method: 'POST',
                     withCredentials: false,
                     headers: {

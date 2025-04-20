@@ -77,10 +77,15 @@ def fetch_and_unzip(download_func, url_string: str, unzip_to: str) -> str:
                 if member.is_dir():
                     continue
 
-                # Remove the top-level directory
-                if common_prefix and original_path.startswith(common_prefix + '/'):
+                # If the file is inside 'processedgaze', adjust the path
+                if 'processedGaze' in original_path:
+                    # Remove 'processedgaze' prefix from the path
+                    relative_path = original_path.replace('processedGaze' + '/', '')
+                elif common_prefix and original_path.startswith(common_prefix + '/'):
+                    # Remove the common top-level directory
                     relative_path = original_path[len(common_prefix)+1:]
                 else:
+                    # Use the original path if no specific folder is found
                     relative_path = original_path
 
                 # Construct the final output path
@@ -113,10 +118,12 @@ def clear_directory(path):
 
 # Add new session to database (after successful dual upload)
 def add_session_to_db(uuidfolder: str):
+    user = User.query.filter_by(username=current_user.username).first()
+    
     try:
         new_session = SessionHistory (
             session_id = uuidfolder,  # created folder. will have files in it and thus will not be deleted during create_user_directory()
-            user_id = session['user']['userinfo']['sub']    # gets user_id (auth0|...) for database integrity
+            user_id = user.id
         )
         db.session.add(new_session)
         db.session.commit()
