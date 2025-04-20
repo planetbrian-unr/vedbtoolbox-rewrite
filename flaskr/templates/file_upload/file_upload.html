@@ -120,7 +120,8 @@
                         <div class="tab-content mt-4">
                             <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
                                 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
-                                <input id="osf_file_upload" type="file" name="filepond" />
+                                <input type="file" id="osf_file_upload" name="filepond" multiple
+       accept=".pldata,.npy,.npz,.yaml,.intrinsics,.extrinsics">
                             </div>
 
                             <div class="tab-pane fade" id="osf_url_entry" role="tabpanel">
@@ -206,29 +207,8 @@
 
         // Create FilePond instance for OSF input
         const osf_pond = FilePond.create(osf_file_upload_input_element, {
-            allowMultiple: true, // Allow multiple file uploads
-            chunkUploads: true, // Enable chunked file uploads
-            server: {
-                url: './upload',
-                process: {
-                    url: '',
-                    method: 'POST',
-                    withCredentials: false,
-                    headers: {
-                        'X-CSRFToken': csrfToken // Attach the CSRF token to the request header
-                    },
-                    onload: response => response,
-                    onerror: response => response,
-                }
-            }
-        });
-
-        // Create FilePond instance for DTB input
-        const dtb_pond = FilePond.create(dtb_file_upload_input_element, {
             allowMultiple: true,
-            allowFileTypeValidation: true,
-            acceptedFileTypes: ['video/mp4', 'text/csv'],
-            chunkUploads: true,
+            allowFileTypeValidation: false, // Disable built-in MIME type validation
             server: {
                 url: './upload',
                 process: {
@@ -245,13 +225,46 @@
             onaddfile: (err, file) => {
                 if (err) return;
 
-                const files = dtb_pond.getFiles();
-                const mp4s = files.filter(f => f.file.type === 'video/mp4');
-                const csvs = files.filter(f => f.file.type === 'text/csv');
+                const allowedExtensions = ['.pldata', '.npy', '.npz', '.yaml', '.intrinsics', '.extrinsics'];
+                const fileName = file.file.name.toLowerCase();
+                const isValid = allowedExtensions.some(ext => fileName.endsWith(ext));
 
-                if (mp4s.length > 3 || csvs.length > 1 || files.length > 4) {
+                if (!isValid) {
+                    osf_pond.removeFile(file.id);
+                    alert(`Invalid file type. Allowed extensions: ${allowedExtensions.join(', ')}`);
+                }
+            }
+        });
+
+        // Create FilePond instance for DTB input
+        const dtb_pond = FilePond.create(dtb_file_upload_input_element, {
+            allowMultiple: true,
+            allowFileTypeValidation: false,  // Disable the built-in MIME type validation
+            server: {
+                url: './upload',
+                process: {
+                    url: '',
+                    method: 'POST',
+                    withCredentials: false,
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    onload: response => response,
+                    onerror: response => response,
+                }
+            },
+            onaddfile: (err, file) => {
+                if (err) return;
+
+                // Allowed file types
+                const allowedExtensions = ['.mp4', '.csv'];
+                const fileName = file.file.name.toLowerCase();
+                const isValid = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                // If the file is invalid, remove it from FilePond and show an alert
+                if (!isValid) {
                     dtb_pond.removeFile(file.id);
-                    alert('Only 3 MP4 files and 1 CSV file are allowed.');
+                    alert(`Invalid file type. Allowed extensions: ${allowedExtensions.join(', ')}`);
                 }
             }
         });

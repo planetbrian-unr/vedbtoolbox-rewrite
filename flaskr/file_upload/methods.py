@@ -97,7 +97,14 @@ def fetch_and_unzip(download_func, url_string: str, unzip_to: str) -> str:
 
     except Exception as e:
         return str(e)
-    
+
+def files_exist(upload_path, allowed_extensions=None):
+    for f in os.listdir(upload_path):
+        if os.path.isfile(os.path.join(upload_path, f)):
+            if allowed_extensions is None or f.lower().endswith(tuple(allowed_extensions)):
+                return True
+    return False
+
 # delete files in a given path
 def clear_directory(path):
     if os.path.exists(path):
