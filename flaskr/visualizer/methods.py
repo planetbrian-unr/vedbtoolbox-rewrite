@@ -13,7 +13,10 @@ from flask import request
 import msgpack
 import numpy as np
 import pandas as pd
+import cv2
+import plotly.io as pio
 
+# data manipulation
 # The following two functions were provided to us by Brian Szekely, a UNR PhD student and a former student
 # of Paul MacNeilage's Self Motion Lab.
 # They work with the pldata files, turning them into readable format for our graphing code
@@ -59,6 +62,7 @@ def load_as_dict(path):
               params[k] = v
     return params
 
+# returning a number
 # Some data files in the VEDB record NANs when the hardware stops recording (for whatever reason)
 def count_nans(vel_list):
     nan_count = sum(1 for value in vel_list if isinstance(value, float) and math.isnan(value))
@@ -66,6 +70,28 @@ def count_nans(vel_list):
     print("Nan Count:", nan_count)
     return nan_count
 
+#Sourced dimension code from here https://stackoverflow.com/questions/7348505/get-dimensions-of-a-video-file
+def get_video_height(vid_file):
+    video_file = cv2.VideoCapture(vid_file)
+    height = video_file.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    video_file.release()
+    return height
+
+def get_video_width(vid_file):
+    video_file = cv2.VideoCapture(vid_file)
+    width = video_file.get(cv2.CAP_PROP_FRAME_WIDTH)
+    video_file.release()
+    return width
+
+def get_video_duration(vid_file):
+    video_file = cv2.VideoCapture(vid_file)
+    frame_rate = video_file.get(cv2.CAP_PROP_FPS)
+    frames = video_file.get(cv2.CAP_PROP_FRAME_COUNT)
+    video_file.release()
+    length = frames/frame_rate
+    return length
+
+# generation
 def generate_velocity_graphs(filename_list: list[str]):
     # assuming either 1. both files exist, 2. neither file exists
     global graph_file_list
@@ -118,6 +144,7 @@ def generate_velocity_graphs(filename_list: list[str]):
 
         json_list = [json_timestamp, json_lin0, json_lin1, json_lin2, json_ang0, json_ang1, json_ang2]
         return json_list
+    return None
 
 def generate_gaze_graph(filename_list):
     for filename in filename_list:
@@ -182,30 +209,7 @@ def generate_gaze_graph(filename_list):
 
         gaze_json = [json_left_timestamp, json_left_norm_pos_x, json_left_norm_pos_y, json_right_timestamp, json_right_norm_pos_x, json_right_norm_pos_y]
         return gaze_json
-
-# Loads the visualizer once files have been correctly uploaded
-def load_visualizer():
-    if request.method == 'POST':
-        if not show_form1 and not show_form2:
-            if get_is_folder(2):
-                file_to_graph = "flaskr/" + get_folder_name(2) + "/odometry.pldata"
-            else:
-                file_to_graph = "odometry.pldata"
-
-            # This returns a JSON_list, in the refactor this will go to the frontend JS for graph generation, in the form of lists not graphs
-            vel_data = generate_velocity_graphs([file_to_graph])
-            if get_is_folder(2):
-                file_to_graph = "flaskr/" + get_folder_name(2) + "/gaze.npz"
-            else:
-                file_to_graph = "gaze.npz"
-            gaze_data = generate_gaze_graph([file_to_graph])
-
-            return render_template("visualizer/visualizer.html", velocity_timestamps = vel_data[0], linear_0 = vel_data[1],
-                                   linear_1 = vel_data[2], linear_2 = vel_data[3], angular_0 = vel_data[4], angular_1 = vel_data[5], angular_2 = vel_data[6],
-                                   left_gaze_timestamps = gaze_data[0], left_norm_pos_x = gaze_data[1], left_norm_pos_y = gaze_data[2],
-                                   right_gaze_timestamps = gaze_data[3], right_norm_pos_x = gaze_data[4], right_norm_pos_y = gaze_data[5])
-        else:
-            raise Exception(f"Invalid Action") #how did it get here
+    return None
 
 def download_graphs():
     linear_graph = request.args.get('linearGraph')
@@ -223,13 +227,23 @@ def download_graphs():
     angular_graph.write_image("images" + angular_file_name + ".png")
     gaze_graph.write_image("images" + gaze_file_name + ".png")
 
-#Function ran when the viewer's exit viewer button is clicked
-def new_files():
-    global video_file_list
-    global data_file_list
-
-    delete_files_in_list(video_file_list)
-    delete_files_in_list(data_file_list)
-
-    delete_folders()
-    clear_lists()
+def get_fig_numbers():
+    if os.path.exists("graphs"):
+        if len(os.listdir("graphs")) == 0:
+            return [1, 1]
+        else:
+            flag = 1
+            linear_number, angular_number = 1, 1
+            while flag == 1:
+                if  os.path.exists("graphs/linear_graph" + str(linear_number) + ".png"):
+                    linear_number = linear_number + 1
+                else:
+                    flag = 0
+            flag = 1
+            while flag == 1:
+                if  os.path.exists("graphs/angular_graph" + str(angular_number) + ".png"):
+                    angular_number = angular_number + 1
+                else:
+                    flag = 0
+            return [linear_number, angular_number]
+    return None

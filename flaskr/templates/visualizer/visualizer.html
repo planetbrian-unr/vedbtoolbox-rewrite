@@ -13,7 +13,7 @@
         <div class="row">
         <!-- World Video (Left) -->
         <div class="col-md-8 d-flex justify-content-center align-items-center">
-            <video id="worldvideo" class="material-video" width="100%" height="auto">
+            <video id="worldvideo" width="100%" height="auto">
             <source src="{{ world_path }}" type="video/mp4">
             Your browser does not support video.
             </video>
@@ -21,11 +21,11 @@
 
         <!-- Eye Videos (Right) -->
         <div class="col-md-4 d-flex flex-column justify-content-center align-items-center gap-3">
-            <video id="eye0video" class="material-video" width="100%" height="auto">
+            <video id="eye0video" width="100%" height="auto">
             <source src="{{ eye0_path }}" type="video/mp4">
             Your browser does not support video.
             </video>
-            <video id="eye1video" class="material-video" width="100%" height="auto">
+            <video id="eye1video" width="100%" height="auto">
             <source src="{{ eye1_path }}" type="video/mp4">
             Your browser does not support video.
             </video>
@@ -70,8 +70,6 @@
     </div>
 </div>
 </div>
-
-
 {% endblock %}
 
 {%  block js %}

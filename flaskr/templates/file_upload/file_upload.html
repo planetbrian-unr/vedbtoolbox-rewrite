@@ -254,6 +254,18 @@
         const dtb_pond = FilePond.create(dtb_file_upload_input_element, {
             allowMultiple: true,
             allowFileTypeValidation: false,
+            server: {
+                url: './upload',
+                process: {
+                    method: 'POST',
+                    withCredentials: false,
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    onload: response => response,
+                    onerror: response => response,
+                }
+            },
             onaddfile: (err, file) => {
                 if (err) return;
 

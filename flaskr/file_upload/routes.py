@@ -18,7 +18,7 @@ UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @blueprint.before_request
-def create_user_directory():
+def setup():
     # Only generate a new UUID if it's not already in the session
     if 'upload_uuid' not in session:
         session['upload_uuid'] = str(uuid.uuid4())
@@ -72,21 +72,29 @@ def file_upload():
 
     # Handle visualizer button
     if visualizer_button.validate_on_submit() and visualizer_button.submit.data:
-        if session.get('data_submitted') and session.get('videos_submitted'):
-            required_files = ['odometry.pldata', 'gaze.npz']
-            missing_files = [f for f in required_files if not os.path.isfile(os.path.join(request.upload_path, f))]
+        # check if certain files are in the directory
+        required_files = ['odometry.pldata', 'gaze.npz']
+        missing_files = [f for f in required_files if not os.path.isfile(os.path.join(request.upload_path, f))]
 
-            if missing_files:
-                flash(f"The following required files are missing: {', '.join(missing_files)}", 'danger')
-            else:
+        if missing_files:
+            flash(f"The following required files are missing: {', '.join(missing_files)}", 'danger')
+        else:
+            try:
+                # Normalize video filenames and add session to database
+                print('success! will add to db and redirect to visualizer')
                 normalize_video_filenames(request.upload_path)
                 add_session_to_db(session['upload_uuid'])
-                session.pop('')
+
+                # Pop session variables
                 session.pop('data_submitted', None)
                 session.pop('videos_submitted', None)
+
+                # Redirect to the visualizer
                 return redirect("/visualizer")
-        else:
-            flash('You must upload both data and video files before continuing.', 'danger')
+            except KeyError:
+                flash("Session data is missing or invalid.", 'danger')
+            except Exception as e:
+                flash(f"An error occurred: {str(e)}", 'danger')
 
     # Handle reset button
     if reset_button.validate_on_submit() and reset_button.reset.data:
