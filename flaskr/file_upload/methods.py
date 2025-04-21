@@ -4,6 +4,7 @@
 
 # base
 import os
+import re
 import zipfile
 from io import BytesIO
 import shutil
@@ -136,3 +137,28 @@ def add_session_to_db(uuidfolder: str):
     except Exception as e:
         # Handle other errors
         return {"status": "error", "message": "An unexpected error occurred."}
+
+# renames eye0*.mp4 to eye0.mp4, and so forth
+def normalize_video_filenames(upload_path):
+    filename_map = {
+        'eye0': re.compile(r'^eye0.*\.mp4$', re.IGNORECASE),
+        'eye1': re.compile(r'^eye1.*\.mp4$', re.IGNORECASE),
+        'world': re.compile(r'^world.*\.mp4$', re.IGNORECASE),
+    }
+
+    for target_name, pattern in filename_map.items():
+        for filename in os.listdir(upload_path):
+            if pattern.match(filename):
+                source_path = os.path.join(upload_path, filename)
+                target_path = os.path.join(upload_path, f"{target_name}.mp4")
+
+                # If the file is already normalized, skip
+                if source_path == target_path:
+                    continue
+
+                # Remove existing target to prevent rename error
+                if os.path.exists(target_path):
+                    os.remove(target_path)
+
+                os.rename(source_path, target_path)
+                break  # Stop after renaming the first match

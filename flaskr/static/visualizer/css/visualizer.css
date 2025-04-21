@@ -19,11 +19,21 @@ body {
   gap: 20px;
 }
 
-.world_video_container,
-.eye_videos_container {
+/* Box style for videos */
+.video-box {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   gap: 20px;
+}
+
+.world_video_container,
+.eye_videos_container {
+  /* These are now handled by .video-box */
+  display: contents; /* Let .video-box manage the layout */
 }
 
 .graph_container {
@@ -34,7 +44,7 @@ body {
   background-color: #ffffff;
   padding: 16px;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .graph_container > div {
@@ -47,9 +57,13 @@ body {
   justify-content: center;
 }
 
+/* Box style for controls */
 .controls_container {
   padding: 20px;
   text-align: center;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .seek-container {
@@ -90,5 +104,5 @@ body {
 
 .material-video {
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

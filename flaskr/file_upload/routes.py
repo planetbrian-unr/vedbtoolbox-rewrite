@@ -29,7 +29,7 @@ def create_user_directory():
     if 'videos_submitted' not in session:
         session['videos_submitted'] = False
         
-    # designate an upload folder, creating it if it doesn't exist
+    # designate an uuid-upload folder, creating it if it doesn't exist
     request.upload_path = os.path.join(UPLOAD_FOLDER, session['upload_uuid'])
     if not os.path.exists(request.upload_path):
         remove_empty_dirs(UPLOAD_FOLDER)
@@ -69,18 +69,22 @@ def file_upload():
                 session['data_submitted'] = True
             else:
                 flash("No files were uploaded for OSF.", 'error')
-    
-    print(f"Data Submitted: {session.get('data_submitted')}")
-    print(f"Videos Submitted: {session.get('videos_submitted')}")
 
     # Handle visualizer button
     if visualizer_button.validate_on_submit() and visualizer_button.submit.data:
         if session.get('data_submitted') and session.get('videos_submitted'):
-            add_session_to_db(session['upload_uuid'])
-            session.pop('upload_uuid', None)
-            session.pop('data_submitted', None)
-            session.pop('videos_submitted', None)
-            return redirect("/visualizer")
+            required_files = ['odometry.pldata', 'gaze.npz']
+            missing_files = [f for f in required_files if not os.path.isfile(os.path.join(request.upload_path, f))]
+
+            if missing_files:
+                flash(f"The following required files are missing: {', '.join(missing_files)}", 'danger')
+            else:
+                normalize_video_filenames(request.upload_path)
+                add_session_to_db(session['upload_uuid'])
+                session.pop('')
+                session.pop('data_submitted', None)
+                session.pop('videos_submitted', None)
+                return redirect("/visualizer")
         else:
             flash('You must upload both data and video files before continuing.', 'danger')
 
@@ -100,7 +104,6 @@ def file_upload():
                            visualizer_button=visualizer_button,
                            reset_button=reset_button
                            )
-
 
 @blueprint.route('/upload', methods=['POST'])
 def upload_file():

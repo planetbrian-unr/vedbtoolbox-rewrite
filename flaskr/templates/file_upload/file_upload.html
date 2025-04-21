@@ -15,13 +15,7 @@
             <div class="row justify-content-center">
                 <!-- notice about file upload -->
                 <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
-                    <strong>Notice!</strong> You must upload both video and data files before proceeding to the visualizer
-                    <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                    <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
-                    <strong>Notice!</strong> If uploading via drag and drop. please upload required files and reload the page.
+                    <strong>Notice!</strong> You must upload both video and data filesets, ensuring <strong>odometry.pldata</strong> and <strong>gaze.npz</strong> are included, before proceeding to the visualizer
                     <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -63,6 +57,12 @@
 
                         <div class="tab-content mt-4">
                             <div class="tab-pane fade show active" id="dtb_file_upload" role="tabpanel">
+                                <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
+                                    <strong>Notice!</strong> If uploading via drag and drop. please upload required filesets and reload the page.
+                                    <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                                 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
                                 <input id="dtb_file_upload" type="file" name="filepond" multiple accept=".mp4,.csv" />
 
@@ -126,6 +126,12 @@
 
                         <div class="tab-content mt-4">
                             <div class="tab-pane fade show active" id="osf_file_upload" role="tabpanel">
+                                <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
+                                    <strong>Notice!</strong> If uploading via drag and drop. please upload required filesets and reload the page.
+                                    <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                                 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
                                 <input type="file" id="osf_file_upload" name="filepond" multiple accept=".pldata,.npy,.npz,.yaml,.intrinsics,.extrinsics">
                             </div>
@@ -248,18 +254,6 @@
         const dtb_pond = FilePond.create(dtb_file_upload_input_element, {
             allowMultiple: true,
             allowFileTypeValidation: false,
-            server: {
-                url: './upload',
-                process: {
-                    method: 'POST',
-                    withCredentials: false,
-                    headers: {
-                        'X-CSRFToken': csrfToken
-                    },
-                    onload: response => response,
-                    onerror: response => response,
-                }
-            },
             onaddfile: (err, file) => {
                 if (err) return;
 
